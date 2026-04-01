@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "preserve",
@@ -13,11 +17,31 @@
     "isolatedModules": true,
     "noEmit": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@agentforge/api": ["./packages/api/src/*"],
-      "@agentforge/web": ["./packages/web/src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "@agentforge/api": [
+        "./packages/api/src/*"
+      ],
+      "@agentforge/web": [
+        "./packages/web/src/*"
+      ]
+    },
+    "allowJs": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["src/**/*", "packages/**/*"],
-  "exclude": ["node_modules", ".paperclip-reference"]
+  "include": [
+    "packages/**/*",
+    "src/**/*",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".paperclip-reference"
+  ]
 }

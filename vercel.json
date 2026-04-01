@@ -1,38 +1,7 @@
-# Vercel Configuration for AgentForge
-
 {
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
-  "installCommand": "pnpm install",
+  "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["iad1", "sin1", "fra1"],
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@api-url",
-    "PAPERCLIP_API_URL": "@paperclip-api-url",
-    "DATABASE_URL": "@database-url"
-  },
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://agentforge.vercel.app,https://localhost:3000" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
-      ]
-    },
-    {
-      "source": "/api/paperclip/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://agentforge.vercel.app,https://localhost:3000" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
-      ]
-    }
-  ],
-  "functions": {
-    "packages/api/src/index.ts": {
-      "runtime": "nodejs20.x",
-      "maxDuration": 30
-    }
-  }
+  "regions": ["iad1", "sin1", "fra1"]
 }

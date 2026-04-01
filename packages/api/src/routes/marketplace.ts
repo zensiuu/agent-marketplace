@@ -18,6 +18,13 @@ const TemplateSchema = z.object({
   rating: z.number().min(1).max(5).default(5),
 });
 
+const PurchaseSchema = z.object({
+  templateId: z.string().min(1, 'Template ID is required'),
+  paymentMethod: z.enum(['stripe', 'card', 'paypal'], {
+    errorMap: () => ({ message: 'Payment method must be stripe, card, or paypal' })
+  }),
+});
+
 marketplaceRouter.get('/templates', (req, res) => {
   const templates = [
     {
@@ -83,11 +90,22 @@ marketplaceRouter.get('/skills', (req, res) => {
 });
 
 marketplaceRouter.post('/purchase', (req, res) => {
-  const { templateId, paymentMethod } = req.body;
+  const result = PurchaseSchema.safeParse(req.body);
+  
+  if (!result.success) {
+    res.status(400).json({
+      error: 'Validation failed',
+      details: result.error.flatten().fieldErrors
+    });
+    return;
+  }
+  
+  const { templateId, paymentMethod } = result.data;
   
   res.status(201).json({
     orderId: crypto.randomUUID(),
     templateId,
+    paymentMethod,
     status: 'processing',
     downloadUrl: `/download/${templateId}`,
     createdAt: new Date().toISOString(),
