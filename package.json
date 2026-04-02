@@ -5,10 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "dev:api": "npm run dev --prefix packages/api",
-    "build": "next build && npm run build --prefix packages/api",
-    "build:web": "npm run build --prefix packages/web",
+    "build": "next build",
     "start": "next start",
-    "start:api": "npm run start --prefix packages/api",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "preview": "vercel"
