@@ -21,7 +21,7 @@ export default function HomePage() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm">
             <span className="status-dot status-active"></span>
             <span className="text-xs text-cyan-400" style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '2px' }}>
-              AUTONOMOUS OPERATIONS ONLINE
+              YOUR AI TEAM IS READY
             </span>
           </div>
 
@@ -30,9 +30,9 @@ export default function HomePage() {
             className="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl"
             style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '4px' }}
           >
-            DEPLOY YOUR <br />
+            BUILD YOUR <br />
             <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent neon-text">
-              AI WORKFORCE
+              AI TEAM
             </span>
           </h1>
 
@@ -46,7 +46,7 @@ export default function HomePage() {
           {/* CTA Buttons */}
           <div className="mt-10 flex items-center justify-center gap-4">
             <button className="btn-primary">
-              Explore Templates
+              Browse Templates
             </button>
             <button className="btn-secondary">
               See How It Works
@@ -90,9 +90,9 @@ export default function HomePage() {
               delay={mounted ? 300 : 0}
             />
             <MetricCard 
-              label="AUTONOMOUS" 
+              label="WORKING" 
               value="24/7" 
-              suffix="ACTIVE"
+              suffix="ALWAYS"
               delay={mounted ? 400 : 0}
             />
           </div>
@@ -114,7 +114,7 @@ export default function HomePage() {
             </p>
           </div>
           <button className="btn-secondary text-xs">
-            View All Templates
+            View All
           </button>
         </div>
 
@@ -167,8 +167,8 @@ export default function HomePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
               </svg>
             }
-            title="AUTONOMOUS OPS"
-            description="AI agents work 24/7 with zero human intervention. Set it and forget it."
+            title="ALWAYS WORKING"
+            description="AI agents work 24/7 so you don't have to. Set your goals and let them handle the rest."
             delay={mounted ? 100 : 0}
           />
           <FeatureCard
@@ -177,8 +177,8 @@ export default function HomePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             }
-            title="BUDGET CONTROL"
-            description="Set spending limits per agent. Track costs in real-time. Never overspend."
+            title="COST CONTROL"
+            description="Set spending limits for each agent. Track costs in real-time. Stay on budget."
             delay={mounted ? 200 : 0}
           />
           <FeatureCard
@@ -187,8 +187,8 @@ export default function HomePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
               </svg>
             }
-            title="REAL-TIME DASHBOARD"
-            description="Monitor all your deployments, agents, and costs from one dashboard."
+            title="SIMPLE DASHBOARD"
+            description="Monitor all your agents and costs from one easy-to-use dashboard."
             delay={mounted ? 300 : 0}
           />
         </div>
@@ -201,7 +201,7 @@ export default function HomePage() {
             className="text-xl font-bold text-white"
             style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '2px' }}
           >
-            READY TO START?
+            READY TO GET STARTED?
           </h3>
           <p className="mx-auto mt-4 max-w-lg text-gray-400" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
             Deploy your first AI team in minutes. No credit card required.
@@ -304,7 +304,7 @@ function TemplateCard({
 
       {/* Deploy Button */}
       <button className="btn-deploy mt-6 w-full">
-        {isReady ? 'Deploy Operation' : 'Stage Team'}
+        {isReady ? 'Get Started' : 'Preview'}
       </button>
     </div>
   );
