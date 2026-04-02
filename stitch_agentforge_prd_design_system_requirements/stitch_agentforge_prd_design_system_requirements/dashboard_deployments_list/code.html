@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&amp;family=Rajdhani:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-container": "#c4abff",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#004e5f",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary": "#a8e8ff",
+                        "surface-dim": "#131313",
+                        "on-tertiary": "#003642",
+                        "surface-variant": "#353534",
+                        "surface": "#131313",
+                        "surface-container": "#201f1f",
+                        "on-secondary-fixed": "#23005c",
+                        "outline": "#859398",
+                        "on-primary-container": "#00586b",
+                        "inverse-surface": "#e5e2e1",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#3c0091",
+                        "primary-container": "#00d4ff",
+                        "on-primary-fixed": "#001f27",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed": "#001f27",
+                        "surface-bright": "#3a3939",
+                        "inverse-primary": "#00677e",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary": "#d0bcff",
+                        "on-primary": "#003642",
+                        "inverse-on-surface": "#313030",
+                        "secondary-fixed": "#e9ddff",
+                        "tertiary-container": "#00d4ff",
+                        "on-tertiary-container": "#00586b",
+                        "background": "#131313",
+                        "tertiary-fixed-dim": "#3cd7ff",
+                        "secondary-container": "#571bc1",
+                        "primary-fixed-dim": "#3cd7ff",
+                        "on-tertiary-fixed-variant": "#004e5f",
+                        "primary-fixed": "#b4ebff",
+                        "tertiary": "#a8e8ff",
+                        "surface-tint": "#3cd7ff",
+                        "on-error": "#690005",
+                        "on-surface": "#e5e2e1",
+                        "outline-variant": "#3c494e",
+                        "tertiary-fixed": "#b4ebff",
+                        "on-background": "#e5e2e1",
+                        "surface-container-highest": "#353534",
+                        "surface-container-high": "#2a2a2a",
+                        "on-surface-variant": "#bbc9cf"
+                    },
+                    fontFamily: {
+                        "headline": ["Orbitron"],
+                        "body": ["Rajdhani"],
+                        "label": ["Rajdhani"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(28, 27, 27, 0.6);
+            backdrop-filter: blur(20px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .bracket-border {
+            position: relative;
+        }
+        .bracket-border::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 8px; height: 8px;
+            border-top: 1px solid #00d4ff;
+            border-left: 1px solid #00d4ff;
+        }
+        .bracket-border::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0; width: 8px; height: 8px;
+            border-bottom: 1px solid #00d4ff;
+            border-right: 1px solid #00d4ff;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-fixed">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16 bg-[#131313] shadow-[0_4px_40px_-5px_rgba(0,212,255,0.08)]">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-widest text-[#00d4ff] font-[Orbitron] uppercase">AGENTFORGE</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-gray-400 font-medium hover:bg-[#00d4ff]/10 hover:text-[#00d4ff] transition-all px-3 py-1" href="#">Dashboard</a>
+<a class="text-[#00d4ff] border-b-2 border-[#00d4ff] pb-1 font-medium" href="#">Deployments</a>
+<a class="text-gray-400 font-medium hover:bg-[#00d4ff]/10 hover:text-[#00d4ff] transition-all px-3 py-1" href="#">Analytics</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-[#131313] text-[#a8e8ff] px-4 py-1.5 border border-outline-variant hover:bg-[#00d4ff]/10 transition-all font-label tracking-widest text-xs uppercase">BOOK A DEMO</button>
+<button class="bg-primary-container text-on-primary-fixed px-4 py-1.5 font-label tracking-widest text-xs font-bold uppercase active:scale-95 duration-100">ACTIVATE CONSOLE</button>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">account_circle</span>
+</div>
+</nav>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#131313] flex flex-col py-6 z-40">
+<div class="px-6 mb-8">
+<p class="font-headline text-xs text-[#00d4ff] tracking-widest">OPERATOR</p>
+<p class="text-[10px] text-gray-600 font-mono">V0.4.2-ALPHA</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium group-hover:translate-x-1 transition-transform">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-[#a8e8ff] bg-[#00d4ff]/5 border-l-4 border-[#00d4ff] font-bold group" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+<span class="font-medium translate-x-1">Deployments</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-medium group-hover:translate-x-1 transition-transform">Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-medium group-hover:translate-x-1 transition-transform">Agent Management</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-medium group-hover:translate-x-1 transition-transform">Marketplace</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium group-hover:translate-x-1 transition-transform">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-6 space-y-4">
+<a class="flex items-center gap-4 text-gray-600 hover:text-[#a8e8ff] transition-colors text-sm" href="#">
+<span class="material-symbols-outlined text-base">help</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-4 text-gray-600 hover:text-[#a8e8ff] transition-colors text-sm" href="#">
+<span class="material-symbols-outlined text-base">terminal</span>
+<span>Logs</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 pb-16 px-10 min-h-screen">
+<div class="max-w-[1400px] mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div>
+<h1 class="font-headline text-4xl font-extrabold tracking-tighter text-on-surface mb-2">DASHBOARD: DEPLOYMENTS</h1>
+<p class="text-on-surface-variant font-label tracking-widest uppercase text-xs">Strategic Oversight &amp; Workforce Modulation</p>
+</div>
+<div class="flex flex-col gap-4 items-end">
+<!-- Search Registry -->
+<div class="relative w-full md:w-80 bracket-border p-2">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/50">search</span>
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary text-on-surface pl-10 py-2 text-sm font-label tracking-wide placeholder:text-gray-600" placeholder="Workforce Registry" type="text"/>
+</div>
+</div>
+</div>
+<!-- Dashboard Control Row -->
+<div class="flex flex-wrap items-center justify-between mb-8 gap-4">
+<div class="flex gap-2">
+<button class="bg-primary/10 text-primary px-6 py-2 border border-primary/30 font-label tracking-widest text-xs uppercase hover:bg-primary/20 transition-all">ALL</button>
+<button class="bg-transparent text-gray-500 px-6 py-2 border border-outline-variant/30 font-label tracking-widest text-xs uppercase hover:text-on-surface transition-all">READY</button>
+<button class="bg-transparent text-gray-500 px-6 py-2 border border-outline-variant/30 font-label tracking-widest text-xs uppercase hover:text-on-surface transition-all">IDLE</button>
+<button class="bg-transparent text-gray-500 px-6 py-2 border border-outline-variant/30 font-label tracking-widest text-xs uppercase hover:text-on-surface transition-all">LAUNCHING</button>
+</div>
+<div class="text-on-surface-variant text-xs font-label tracking-widest flex items-center gap-2">
+<span class="status-pulse w-2 h-2 bg-primary rounded-full"></span>
+                    SYSTEMS NOMINAL: 3 ACTIVE UNITS
+                </div>
+</div>
+<!-- Asymmetric Grid Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Deployment Cards Column (Primary) -->
+<div class="col-span-12 lg:col-span-9 space-y-6">
+<!-- Card 1: SaaS Squad 01 -->
+<div class="glass-panel border-l-4 border-primary p-8 flex flex-col md:flex-row items-center justify-between gap-8 hover:bg-surface-container-low transition-all group">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">groups</span>
+</div>
+<div>
+<h3 class="font-headline text-xl text-on-surface tracking-tight">SaaS Squad 01</h3>
+<div class="flex items-center gap-4 mt-1 text-sm text-on-surface-variant font-label uppercase tracking-widest">
+<span class="flex items-center gap-1"><span class="text-primary font-bold">5</span> Units</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">speed</span> 12ms Latency</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="bg-primary/10 text-primary text-[10px] px-3 py-0.5 font-bold tracking-widest uppercase flex items-center gap-1.5">
+<span class="status-pulse w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                Running
+                            </span>
+<div class="flex gap-3 mt-4">
+<button class="px-5 py-2 border border-outline-variant text-xs font-bold tracking-widest uppercase hover:bg-on-surface hover:text-surface transition-all">VIEW WORK</button>
+<button class="px-5 py-2 bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase hover:bg-secondary transition-all">RE-DEPLOY</button>
+</div>
+</div>
+</div>
+<!-- Card 2: DevOps Core -->
+<div class="glass-panel border-l-4 border-primary p-8 flex flex-col md:flex-row items-center justify-between gap-8 hover:bg-surface-container-low transition-all group">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">terminal</span>
+</div>
+<div>
+<h3 class="font-headline text-xl text-on-surface tracking-tight">DevOps Core</h3>
+<div class="flex items-center gap-4 mt-1 text-sm text-on-surface-variant font-label uppercase tracking-widest">
+<span class="flex items-center gap-1"><span class="text-primary font-bold">8</span> Units</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">speed</span> 8ms Latency</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="bg-primary/10 text-primary text-[10px] px-3 py-0.5 font-bold tracking-widest uppercase flex items-center gap-1.5">
+<span class="status-pulse w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                Running
+                            </span>
+<div class="flex gap-3 mt-4">
+<button class="px-5 py-2 border border-outline-variant text-xs font-bold tracking-widest uppercase hover:bg-on-surface hover:text-surface transition-all">VIEW WORK</button>
+<button class="px-5 py-2 bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase hover:bg-secondary transition-all">RE-DEPLOY</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Market Analytics -->
+<div class="glass-panel border-l-4 border-gray-700 p-8 flex flex-col md:flex-row items-center justify-between gap-8 hover:bg-surface-container-low transition-all group">
+<div class="flex items-center gap-6 opacity-60">
+<div class="w-16 h-16 bg-surface-container-highest flex items-center justify-center border border-outline-variant/20">
+<span class="material-symbols-outlined text-gray-400 text-3xl">analytics</span>
+</div>
+<div>
+<h3 class="font-headline text-xl text-on-surface tracking-tight">Market Analytics</h3>
+<div class="flex items-center gap-4 mt-1 text-sm text-on-surface-variant font-label uppercase tracking-widest">
+<span class="flex items-center gap-1"><span class="text-gray-400 font-bold">12</span> Units</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">speed</span> -- ms Latency</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="bg-surface-container-highest text-gray-500 text-[10px] px-3 py-0.5 font-bold tracking-widest uppercase flex items-center gap-1.5">
+                                Standby
+                            </span>
+<div class="flex gap-3 mt-4">
+<button class="px-5 py-2 border border-outline-variant text-xs font-bold tracking-widest uppercase hover:bg-on-surface hover:text-surface transition-all">VIEW WORK</button>
+<button class="px-5 py-2 bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase hover:bg-secondary transition-all">RE-DEPLOY</button>
+</div>
+</div>
+</div>
+</div>
+<!-- System Health Sidebar -->
+<div class="col-span-12 lg:col-span-3 space-y-8">
+<div class="glass-panel p-6 border border-outline-variant/10">
+<h4 class="font-headline text-xs text-primary tracking-widest uppercase mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">public</span>
+                            Regional Health
+                        </h4>
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center text-[10px] font-label tracking-widest uppercase">
+<span class="text-on-surface">US-EAST-01</span>
+<span class="text-primary">99.8%</span>
+</div>
+<div class="h-1 bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-primary w-[99.8%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center text-[10px] font-label tracking-widest uppercase">
+<span class="text-on-surface">EU-WEST-04</span>
+<span class="text-primary">94.2%</span>
+</div>
+<div class="h-1 bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-primary w-[94.2%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center text-[10px] font-label tracking-widest uppercase">
+<span class="text-on-surface">AP-SOUTH-02</span>
+<span class="text-error">62.1%</span>
+</div>
+<div class="h-1 bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-error w-[62.1%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-10 p-4 border border-primary/20 bg-primary/5">
+<p class="font-label text-[10px] text-primary tracking-widest mb-2 uppercase">LATEST LOG ENTRY</p>
+<p class="font-mono text-[9px] text-on-surface-variant leading-relaxed">
+                                [14:22:05] SECURE_HANDSHAKE: SQUAD_01 AUTH SUCCESS<br/>
+                                [14:22:08] DATA_STREAM_STABLE: LATENCY 12MS
+                            </p>
+</div>
+</div>
+<div class="relative overflow-hidden group">
+<img class="w-full h-40 object-cover opacity-40 group-hover:opacity-60 transition-opacity" data-alt="abstract tech background with glowing cyan and purple lines and particles in a dark futuristic space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo-2IdaoGSYuaIUsMshTE8A1IJn2908lJy6qU-5INCOVXR8IfSrXbkVAF9870VnVj2pQ6uwtVNyMaITHeg4qz0go0zyV5qtCsXXSR-aJSQsolyxr1Nrc0eZRGQJOLh4aQaZ-C192k-jcFfGuupaFKrVrU5XmV6cjPG-xxcBALJBTNHmLFUm4Bl5iNdGnrHNJ8it9LvrGhfS5InR-9NsIJr8ObWU9_112cWohk7T6LBQUoag5UQrj50-XhvmCrwIKU1tnDuQrIegDnx"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent p-6 flex flex-col justify-end">
+<h5 class="font-headline text-[10px] text-[#00d4ff] tracking-[0.2em] mb-1">PRO UPGRADE</h5>
+<p class="font-label text-xs text-on-surface-variant leading-tight">Unlock Multi-Agent Parallel Reasoning clusters.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Status Bar -->
+<footer class="fixed bottom-0 left-64 right-0 px-8 py-3 flex justify-between items-center text-[10px] bg-[#131313] z-40">
+<div class="flex items-center gap-6 font-label tracking-widest text-gray-600 uppercase">
+<span class="text-[#00d4ff] flex items-center gap-1.5">
+<span class="status-pulse w-1.5 h-1.5 bg-[#00d4ff] rounded-full"></span>
+                SYSTEM STATUS: OPERATIONAL
+            </span>
+<span>V0.8.4-STARK</span>
+</div>
+<div class="flex gap-8">
+<a class="text-gray-600 hover:text-[#a8e8ff] font-label tracking-widest uppercase transition-colors" href="#">Early Access</a>
+<a class="text-gray-600 hover:text-[#a8e8ff] font-label tracking-widest uppercase transition-colors" href="#">Documentation</a>
+<a class="text-gray-600 hover:text-[#a8e8ff] font-label tracking-widest uppercase transition-colors" href="#">API Console</a>
+</div>
+</footer>
+</body></html>

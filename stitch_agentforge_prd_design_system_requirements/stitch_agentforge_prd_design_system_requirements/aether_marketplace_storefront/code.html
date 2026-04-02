@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SOVEREIGN COMMAND | Template Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Rajdhani:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;700&amp;family=Manrope:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#a8e8ff",
+              "surface-variant": "#353534",
+              "surface-bright": "#3a3939",
+              "on-surface-variant": "#bbc9cf",
+              "on-tertiary": "#003642",
+              "on-primary-fixed-variant": "#004e5f",
+              "secondary-container": "#571bc1",
+              "on-surface": "#e5e2e1",
+              "surface-container-lowest": "#0e0e0e",
+              "secondary-fixed": "#e9ddff",
+              "on-error-container": "#ffdad6",
+              "secondary-fixed-dim": "#d0bcff",
+              "outline-variant": "#3c494e",
+              "secondary": "#d0bcff",
+              "on-secondary": "#3c0091",
+              "on-background": "#e5e2e1",
+              "inverse-on-surface": "#313030",
+              "primary-container": "#00d4ff",
+              "on-primary-container": "#00586b",
+              "surface-dim": "#131313",
+              "on-tertiary-fixed": "#001f27",
+              "error-container": "#93000a",
+              "on-error": "#690005",
+              "tertiary-fixed": "#b4ebff",
+              "surface-container-low": "#1c1b1b",
+              "surface-container-high": "#2a2a2a",
+              "inverse-surface": "#e5e2e1",
+              "primary-fixed-dim": "#3cd7ff",
+              "surface-container-highest": "#353534",
+              "on-primary-fixed": "#001f27",
+              "on-secondary-fixed": "#23005c",
+              "on-tertiary-container": "#00586b",
+              "tertiary-fixed-dim": "#3cd7ff",
+              "on-primary": "#003642",
+              "outline": "#859398",
+              "surface": "#131313",
+              "tertiary-container": "#00d4ff",
+              "on-tertiary-fixed-variant": "#004e5f",
+              "on-secondary-container": "#c4abff",
+              "surface-container": "#201f1f",
+              "tertiary": "#a8e8ff",
+              "surface-tint": "#3cd7ff",
+              "on-secondary-fixed-variant": "#5516be",
+              "background": "#131313",
+              "primary-fixed": "#b4ebff",
+              "inverse-primary": "#00677e",
+              "error": "#ffb4ab"
+            },
+            fontFamily: {
+              "headline": ["Orbitron", "sans-serif"],
+              "body": ["Rajdhani", "sans-serif"],
+              "label": ["Rajdhani", "sans-serif"],
+              "technical": ["Rajdhani", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-panel {
+        background: rgba(19, 19, 19, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      body {
+        background-color: #131313;
+        color: #e5e2e1;
+      }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 border-b border-white/10 bg-[#131313]/60 backdrop-blur-xl flex justify-between items-center px-6 h-16 w-full shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-8">
+<span class="font-['Orbitron'] text-xl font-black tracking-tighter text-cyan-400 drop-shadow-[0_0_8px_rgba(0,212,255,0.5)]">SOVEREIGN COMMAND</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-['Orbitron'] uppercase tracking-widest text-sm text-cyan-400 border-b-2 border-cyan-400 pb-1" href="#">Marketplace</a>
+<a class="font-['Orbitron'] uppercase tracking-widest text-sm text-slate-400 hover:text-cyan-200 transition-colors" href="#">Solutions</a>
+<a class="font-['Orbitron'] uppercase tracking-widest text-sm text-slate-400 hover:text-cyan-200 transition-colors" href="#">Pricing</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden sm:block">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-sm">search</span>
+<input class="bg-surface-container-low border-b border-outline-variant/30 focus:border-primary-container focus:ring-0 text-sm py-1.5 pl-9 pr-4 w-64 transition-all duration-300 rounded-lg" placeholder="Scan neural assets..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors duration-200">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors duration-200">settings</button>
+<div class="h-8 w-px bg-white/10 mx-2"></div>
+<button class="bg-primary-container text-on-primary-container font-headline text-xs px-4 py-2 rounded-lg font-bold tracking-tight active:scale-95 duration-200">Deploy Agent</button>
+</div>
+</header>
+<!-- Sidebar (SideNavBar) -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 border-r border-white/5 bg-[#131313] hidden lg:flex flex-col py-4 z-40">
+<div class="px-6 py-4 flex items-center gap-3 border-b border-white/5 mb-6">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-primary/20">
+<img alt="Commander Profile" data-alt="Futuristic digital avatar profile photo with neon cybernetic details and dark metallic background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJB_JxXgTS9iKnBVYDt-iLmqQr0IaDg1lQdg7Uw7S_-2_Ro4-yCMXwS2xVCkIM_A6A9OMGEGw6n-t2uZmoowiJ4Uie-QjlD3GA_Jl2kIJ4Zpr5X44zvSdYO6ynBlXx9RNAK1Auxc5F8FInLs5Fgd3cz8FmDIdoU7IS3vnJIlS3V7wIs1VCO20EMKw5wWnFuog7fULlaXSzn1xf0Y750zG0454SE82KNiQIutRisfoZ2Y_Dncx4gDrCDSc1EwQX-qzQ3uMIZRROmRoK"/>
+</div>
+<div>
+<p class="font-['Orbitron'] text-xs font-bold text-cyan-400 tracking-tighter">OPERATOR-01</p>
+<p class="font-['Rajdhani'] text-[10px] text-slate-500 uppercase tracking-widest">Level 4 Clearance</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-slate-500 px-4 py-3 flex items-center gap-3 hover:text-slate-300 font-['Rajdhani'] font-medium text-base tracking-tight transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span> Command Center
+            </a>
+<a class="bg-cyan-500/10 text-cyan-400 border-l-4 border-cyan-400 px-4 py-3 flex items-center gap-3 font-['Rajdhani'] font-medium text-base tracking-tight" href="#">
+<span class="material-symbols-outlined">shopping_cart</span> Marketplace
+            </a>
+<a class="text-slate-500 px-4 py-3 flex items-center gap-3 hover:text-slate-300 font-['Rajdhani'] font-medium text-base tracking-tight transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">analytics</span> Fleet Metrics
+            </a>
+<a class="text-slate-500 px-4 py-3 flex items-center gap-3 hover:text-slate-300 font-['Rajdhani'] font-medium text-base tracking-tight transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">memory</span> Neural Assets
+            </a>
+</nav>
+<div class="px-6 py-8">
+<h3 class="font-headline text-[10px] text-slate-600 uppercase tracking-[0.2em] mb-4">Neural Filters</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="rounded border-outline-variant bg-surface-container-low text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-label text-sm text-on-surface-variant group-hover:text-primary transition-colors">Tech Agents</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded border-outline-variant bg-surface-container-low text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-label text-sm text-on-surface-variant group-hover:text-primary transition-colors">Marketing Units</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded border-outline-variant bg-surface-container-low text-primary focus:ring-primary-container" type="checkbox"/>
+<span class="font-label text-sm text-on-surface-variant group-hover:text-primary transition-colors">Data Analysts</span>
+</label>
+</div>
+</div>
+<div class="mt-auto px-4 pb-6 border-t border-white/5 pt-6">
+<button class="w-full bg-surface-container-high hover:bg-surface-container-highest text-primary font-headline text-[10px] tracking-widest py-3 border border-primary/20 transition-all duration-300">
+                NEW DEPLOYMENT
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:pl-64 pt-16 min-h-screen bg-background">
+<div class="p-8 space-y-12">
+<!-- Hero Section: Featured Asset -->
+<section class="relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent z-10"></div>
+<div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/10 blur-[100px] rounded-full"></div>
+<div class="relative h-[450px] w-full rounded-xl overflow-hidden border border-white/5 flex items-center">
+<img class="absolute inset-0 w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100" data-alt="Abstract cinematic 3D render of cybernetic quantum processor with cyan glowing circuits and deep purple energy aura" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMzsAB0TNERkoJKKTocnlYf4vCdivcaQq1uHspSqUMAt_kRTfQ6LyU4nWFalSjhWOSEjuJTdGhS8UXTk2Pf9hSDy0S0TLN_dzVxBXU8bP52rfSQzsaq1e1qpypHC0cDm8Wi0orQnFu0SHxGAvYSx3BmztS5FQa32Ag1way4wmo0OvAC9e97ciCWEUbSHqgbn5yQA10GnRcFpmMY6YXUkMRrHig1wWti0BlZIZgotd9j1S568hxehclgEFeyXNl2UEmDp8f8NyC-bbR"/>
+<div class="relative z-20 px-12 max-w-2xl space-y-6">
+<div class="flex items-center gap-3">
+<span class="bg-primary/20 text-primary px-3 py-1 text-[10px] font-headline tracking-widest border border-primary/40">SYSTEM FEATURED</span>
+<span class="flex items-center gap-1 text-secondary text-[10px] font-headline tracking-widest">
+<span class="material-symbols-outlined text-sm">verified</span> PROTOCOL ACTIVE
+                            </span>
+</div>
+<h1 class="font-headline text-5xl font-black text-on-surface tracking-tighter leading-none">QUANTUM LEAP SQUAD</h1>
+<p class="font-body text-xl text-on-surface-variant/80 leading-relaxed max-w-lg">
+                            Advanced multi-agent matrix optimized for deep-learning deployment. Orchestrates complex neural pathways for rapid prototyping and market domination.
+                        </p>
+<div class="flex items-center gap-6 pt-4">
+<div>
+<p class="font-label text-[10px] text-slate-500 uppercase tracking-[0.2em]">Asset Configuration</p>
+<p class="font-headline text-2xl text-primary font-bold">12 CORE UNITS</p>
+</div>
+<div class="h-10 w-px bg-white/10"></div>
+<div>
+<p class="font-label text-[10px] text-slate-500 uppercase tracking-[0.2em]">Operational Rate</p>
+<p class="font-headline text-2xl text-on-surface font-bold">$1,299/MO</p>
+</div>
+</div>
+<div class="flex items-center gap-4 pt-6">
+<button class="bg-primary-container text-on-primary-container px-8 py-3 font-headline text-sm font-black tracking-tight rounded-lg hover:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all">
+                                DEPLOY SQUAD
+                            </button>
+<button class="border border-white/20 text-on-surface hover:bg-white/5 px-8 py-3 font-headline text-sm font-black tracking-tight rounded-lg transition-all">
+                                VIEW SCHEMATICS
+                            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Marketplace Grid -->
+<section class="space-y-8">
+<div class="flex items-end justify-between border-b border-white/5 pb-4">
+<div>
+<h2 class="font-headline text-2xl font-bold text-on-surface">AVAILABLE SQUADS</h2>
+<p class="font-label text-sm text-slate-500">Showing 24 active neural asset templates</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-high p-2 rounded material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">grid_view</button>
+<button class="bg-surface-container-low p-2 rounded material-symbols-outlined text-slate-600 hover:text-primary transition-colors">view_list</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Card 1: SaaS Squad 01 -->
+<div class="group bg-surface-container-low border border-white/5 hover:border-primary/30 transition-all duration-300 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80" data-alt="Sleek dark futuristic hardware server room with glowing green and cyan status lights and metallic textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWKomyV0ybSsM81GFAXJHI5ZAVGrvyq_sUdVKskKJA-VdJMs3LaD0fXjY_g98cHDga1tTodLY7PiWko3fC73sWNpxptQAvdFbhGcie36dnI0wEtr-63aOmxVius-sZgGMon5vv9NBWQ_uKXA8vnKDNL6MUSgQ6_RRTMej6eNtcT-uwO7qQGsYQU7G-xy0wnCnUB6EAUBGeV0qCByOXE-iNkAAFOISuQ1gbvg-9xRWoXdyOGdethBryB_yPWOCuZoyA4B8JwvP48utO"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary/20 backdrop-blur-md text-primary text-[9px] font-headline px-2 py-1 border border-primary/30 rounded">PRO</span>
+<span class="bg-secondary/20 backdrop-blur-md text-secondary text-[9px] font-headline px-2 py-1 border border-secondary/30 rounded">STABLE</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col space-y-6">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline text-lg font-bold text-on-surface">SaaS Squad 01</h3>
+<p class="font-label text-xs text-slate-500 uppercase tracking-widest">Growth &amp; Dev Ops</p>
+</div>
+<div class="text-right">
+<p class="font-headline text-lg text-primary-container font-black">$499/MO</p>
+<p class="font-label text-[10px] text-slate-500">ENTRY TIER</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-white/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-slate-600">group</span>
+<span class="font-label text-sm text-on-surface-variant">5 Units</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-slate-600">bolt</span>
+<span class="font-label text-sm text-on-surface-variant">Instant Deploy</span>
+</div>
+</div>
+<div class="flex gap-3 pt-2">
+<button class="flex-1 bg-primary/10 hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/30 py-3 font-headline text-[11px] font-bold tracking-widest transition-all rounded-lg">
+                                    DEPLOY TEAM
+                                </button>
+<button class="p-3 border border-white/10 hover:bg-white/5 text-slate-400 rounded-lg transition-all material-symbols-outlined">
+                                    visibility
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 2: Marketplace Analytics Team -->
+<div class="group bg-surface-container-low border border-white/5 hover:border-secondary/30 transition-all duration-300 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80" data-alt="Complex 3D data visualization chart with translucent blue and purple bars floating in a dark atmospheric digital space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvUTuzOgaAOGS4SWtpUNXEZLjrj88m3tVnTNyTP_-sw45IOc6nz_jo0nC1X8HsJCjXLvbeTuuEk9BpKIIRsqwCWO4lGcqqqfmN3a-A0HuFyvtBUAIutLns9Ib_pUFzbUTCG5psLNIkYFDM7V9UNSZzxkHnAI-2inNHbM7Yd3KTqPFl3SJFryxlIVP-rs0zs3iNa6r4bNENhC2RTG4v4ZczRXzQ7_-q9s6_YgLeFCQqlg72COLT5v5MjX7h8NI-ptg5zHttxqgUBIf8"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-secondary/20 backdrop-blur-md text-secondary text-[9px] font-headline px-2 py-1 border border-secondary/30 rounded">POPULAR</span>
+<span class="bg-green-500/20 backdrop-blur-md text-green-400 text-[9px] font-headline px-2 py-1 border border-green-500/30 rounded">LIVE</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col space-y-6">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline text-lg font-bold text-on-surface">Marketplace Analytics</h3>
+<p class="font-label text-xs text-slate-500 uppercase tracking-widest">Data Insight Matrix</p>
+</div>
+<div class="text-right">
+<p class="font-headline text-lg text-primary-container font-black">$850/MO</p>
+<p class="font-label text-[10px] text-slate-500">ADVANCED</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-white/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-slate-600">group</span>
+<span class="font-label text-sm text-on-surface-variant">8 Units</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-slate-600">shield</span>
+<span class="font-label text-sm text-on-surface-variant">Lvl 3 Security</span>
+</div>
+</div>
+<div class="flex gap-3 pt-2">
+<button class="flex-1 bg-primary/10 hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/30 py-3 font-headline text-[11px] font-bold tracking-widest transition-all rounded-lg">
+                                    DEPLOY TEAM
+                                </button>
+<button class="p-3 border border-white/10 hover:bg-white/5 text-slate-400 rounded-lg transition-all material-symbols-outlined">
+                                    visibility
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 3: Neural Content Engine -->
+<div class="group bg-surface-container-low border border-white/5 hover:border-primary/30 transition-all duration-300 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80" data-alt="Intricate glowing neural network filaments connecting together in a dark space with particles and ethereal light beams" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8TYi0tvu50jJ14ICBYhNuwxnB9IuUfaTNMvNuVMtMWtTc39yzbie-HSAPRGlDeJWK51HwePs-g-PH48fgVTg-p_0wTipqUYclQoKdfWjlYIqfo81e0KyAWd9yNkko74hpdxJGGjkwJexQ0NEVaKX7KEPyiYoWvkbs3FkEkMXV6v-ZbFfHFgttA8TOXqBW8Ip_Sozn1SFb-hhPAECuY4iRtkz_iPs5x41HHjffgyl_X9uWWP1edqEZE5WPBL-jlibL0NzLyXNRWckg"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary/20 backdrop-blur-md text-primary text-[9px] font-headline px-2 py-1 border border-primary/30 rounded">NEW</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col space-y-6">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline text-lg font-bold text-on-surface">Neural Content Engine</h3>
+<p class="font-label text-xs text-slate-500 uppercase tracking-widest">Creative Synthesis</p>
+</div>
+<div class="text-right">
+<p class="font-headline text-lg text-primary-container font-black">$599/MO</p>
+<p class="font-label text-[10px] text-slate-500">CREATIVE</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-white/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-slate-600">group</span>
+<span class="font-label text-sm text-on-surface-variant">3 Units</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-slate-600">auto_awesome</span>
+<span class="font-label text-sm text-on-surface-variant">GPU Boosted</span>
+</div>
+</div>
+<div class="flex gap-3 pt-2">
+<button class="flex-1 bg-primary/10 hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/30 py-3 font-headline text-[11px] font-bold tracking-widest transition-all rounded-lg">
+                                    DEPLOY TEAM
+                                </button>
+<button class="p-3 border border-white/10 hover:bg-white/5 text-slate-400 rounded-lg transition-all material-symbols-outlined">
+                                    visibility
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer -->
+<footer class="w-full py-6 mt-12 border-t border-white/10 bg-[#0a0a0a] flex justify-between items-center px-8">
+<div class="flex items-center gap-6">
+<p class="font-['Rajdhani'] text-[10px] uppercase tracking-[0.2em] text-slate-600">© 2024 SOVEREIGN COMMAND | TACTICAL INTERFACE V2.4</p>
+<div class="flex gap-4">
+<a class="font-['Rajdhani'] text-[10px] uppercase tracking-[0.2em] text-slate-600 hover:text-purple-400 transition-colors" href="#">Privacy Protocol</a>
+<a class="font-['Rajdhani'] text-[10px] uppercase tracking-[0.2em] text-slate-600 hover:text-purple-400 transition-colors" href="#">API Keys</a>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span class="font-['Rajdhani'] text-[10px] uppercase tracking-[0.2em] text-cyan-400">System Status: Operational</span>
+</div>
+</footer>
+</main>
+</body></html>
