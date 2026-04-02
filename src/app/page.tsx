@@ -15,10 +15,10 @@ export default function HomePage() {
             AGENTFORGE
           </div>
           <div className="hidden lg:flex gap-10">
-            <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-[#00d4ff] font-bold border-b-2 border-[#00d4ff] pb-1" href="#">MARKETPLACE</a>
-            <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-white/70 hover:text-white transition-colors" href="#">TEMPLATES</a>
-            <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-white/70 hover:text-white transition-colors" href="#">SKILLS</a>
-            <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-white/70 hover:text-white transition-colors" href="#">DOCS</a>
+            <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-[#00d4ff] font-bold border-b-2 border-[#00d4ff] pb-1" href="/dashboard/templates">MARKETPLACE</a>
+            <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-white/70 hover:text-white transition-colors" href="/dashboard/templates">TEMPLATES</a>
+            <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-white/70 hover:text-white transition-colors" href="/dashboard/templates">SKILLS</a>
+            <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-white/70 hover:text-white transition-colors" href="/docs">DOCS</a>
           </div>
           <div className="flex items-center gap-4 md:gap-6">
             <a href="/api/auth/login" className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[10px] md:text-xs text-white/70 hover:text-white transition-colors">LOGIN</a>
@@ -51,9 +51,9 @@ export default function HomePage() {
                 EXPLORE TEMPLATES
                 <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </a>
-              <button className="border border-outline-variant hover:border-primary/50 text-white font-headline px-8 md:px-10 py-4 md:py-5 rounded-sm text-xs md:text-sm font-bold tracking-widest transition-all bg-white/5 backdrop-blur-sm">
+              <a href="#how-it-works" className="border border-outline-variant hover:border-primary/50 text-white font-headline px-8 md:px-10 py-4 md:py-5 rounded-sm text-xs md:text-sm font-bold tracking-widest transition-all bg-white/5 backdrop-blur-sm">
                 SEE HOW IT WORKS
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@ export default function HomePage() {
               <h2 className="font-headline text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight uppercase">Popular Templates</h2>
               <div className="h-1 w-24 bg-primary"></div>
             </div>
-            <a className="text-primary font-label text-sm tracking-widest hover:underline decoration-2 underline-offset-8" href="#">VIEW ALL MARKETPLACE</a>
+              <a className="text-primary font-label text-sm tracking-widest hover:underline decoration-2 underline-offset-8" href="/dashboard/templates">VIEW ALL MARKETPLACE</a>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Card 1 */}
@@ -116,7 +116,7 @@ export default function HomePage() {
                     <span className="text-xs font-label text-white/80">Full CI/CD</span>
                   </div>
                 </div>
-                <button className="mt-auto w-full border border-primary/20 hover:bg-primary hover:text-on-primary transition-all py-3 font-headline text-[10px] md:text-xs tracking-widest font-bold">VIEW DETAILS</button>
+                <button className="mt-auto w-full border border-primary/20 hover:bg-primary hover:text-on-primary transition-all py-3 font-headline text-[10px] md:text-xs tracking-widest font-bold" onClick={() => window.location.href = '/dashboard/templates'}>VIEW DETAILS</button>
               </div>
             </div>
             {/* Card 2 */}
@@ -143,7 +143,7 @@ export default function HomePage() {
                     <span className="text-xs font-label text-white/80">Multi-Channel</span>
                   </div>
                 </div>
-                <button className="mt-auto w-full border border-primary/20 hover:bg-primary hover:text-on-primary transition-all py-3 font-headline text-[10px] md:text-xs tracking-widest font-bold">VIEW DETAILS</button>
+                <button className="mt-auto w-full border border-primary/20 hover:bg-primary hover:text-on-primary transition-all py-3 font-headline text-[10px] md:text-xs tracking-widest font-bold" onClick={() => window.location.href = '/dashboard/templates'}>VIEW DETAILS</button>
               </div>
             </div>
             {/* Card 3 */}
@@ -170,7 +170,7 @@ export default function HomePage() {
                     <span className="text-xs font-label text-white/80">Auto-Scaling</span>
                   </div>
                 </div>
-                <button className="mt-auto w-full border border-primary/20 hover:bg-primary hover:text-on-primary transition-all py-3 font-headline text-[10px] md:text-xs tracking-widest font-bold">VIEW DETAILS</button>
+                <button className="mt-auto w-full border border-primary/20 hover:bg-primary hover:text-on-primary transition-all py-3 font-headline text-[10px] md:text-xs tracking-widest font-bold" onClick={() => window.location.href = '/dashboard/templates'}>VIEW DETAILS</button>
               </div>
             </div>
           </div>
@@ -451,11 +451,11 @@ export default function HomePage() {
               </p>
             </div>
             <div className="flex flex-wrap justify-center md:justify-end gap-x-10 gap-y-4">
-              <a className="font-body text-sm tracking-wide text-white/40 hover:text-primary transition-colors uppercase" href="#">Marketplace</a>
-              <a className="font-body text-sm tracking-wide text-white/40 hover:text-primary transition-colors uppercase" href="#">Templates</a>
-              <a className="font-body text-sm tracking-wide text-white/40 hover:text-primary transition-colors uppercase" href="#">Docs</a>
-              <a className="font-body text-sm tracking-wide text-white/40 hover:text-primary transition-colors uppercase" href="#">Privacy</a>
-              <a className="font-body text-sm tracking-wide text-white/60 hover:text-primary transition-colors uppercase font-bold border-b border-white/10" href="#">Contact &amp; Support</a>
+              <a className="font-body text-sm tracking-wide text-white/40 hover:text-primary transition-colors uppercase" href="/dashboard/templates">Marketplace</a>
+              <a className="font-body text-sm tracking-wide text-white/40 hover:text-primary transition-colors uppercase" href="/dashboard/templates">Templates</a>
+              <a className="font-body text-sm tracking-wide text-white/40 hover:text-primary transition-colors uppercase" href="/docs">Docs</a>
+              <a className="font-body text-sm tracking-wide text-white/40 hover:text-primary transition-colors uppercase" href="/privacy">Privacy</a>
+              <a className="font-body text-sm tracking-wide text-white/60 hover:text-primary transition-colors uppercase font-bold border-b border-white/10" href="/contact">Contact &amp; Support</a>
             </div>
           </div>
         </div>
