@@ -101,10 +101,19 @@ export default function DashboardLayout({
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold">
                 U
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="text-sm text-white" style={{ fontFamily: 'Rajdhani, sans-serif' }}>User</p>
                 <p className="text-xs text-gray-500">user@example.com</p>
               </div>
+              <a 
+                href="/api/auth/logout" 
+                className="text-gray-500 hover:text-red-400 transition-colors"
+                title="Logout"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>

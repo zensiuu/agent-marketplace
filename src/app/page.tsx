@@ -21,10 +21,10 @@ export default function HomePage() {
             <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-white/70 hover:text-white transition-colors" href="#">DOCS</a>
           </div>
           <div className="flex items-center gap-4 md:gap-6">
-            <button className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[10px] md:text-xs text-white/70 hover:text-white transition-colors">LOGIN</button>
-            <button className="bg-gradient-to-br from-primary to-primary-dim text-on-primary font-['Space_Grotesk'] px-4 md:px-6 py-2 md:py-2.5 rounded-sm text-[10px] md:text-xs font-bold tracking-widest btn-glow transition-all active:scale-95">
+            <a href="/api/auth/login" className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[10px] md:text-xs text-white/70 hover:text-white transition-colors">LOGIN</a>
+            <a href="/signup" className="bg-gradient-to-br from-primary to-primary-dim text-on-primary font-['Space_Grotesk'] px-4 md:px-6 py-2 md:py-2.5 rounded-sm text-[10px] md:text-xs font-bold tracking-widest btn-glow transition-all active:scale-95">
               GET STARTED
-            </button>
+            </a>
           </div>
         </div>
       </nav>
@@ -37,20 +37,20 @@ export default function HomePage() {
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-highest border-l-2 border-primary mb-8">
               <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-              <span className="font-label text-[10px] uppercase tracking-[0.3em] font-bold text-primary">COMMAND YOUR AI ARMY</span>
+              <span className="font-label text-[10px] uppercase tracking-[0.3em] font-bold text-primary">BUILD YOUR AI TEAM</span>
             </div>
             <h1 className="font-headline text-4xl md:text-7xl font-extrabold text-primary mb-6 leading-[1.1] tracking-tight">
-              Deploy Your AI <br/>
-              <span className="text-white opacity-90">Workforce in Minutes</span>
+              Build Your AI <br/>
+              <span className="text-white opacity-90">Team in Minutes</span>
             </h1>
             <p className="font-body text-lg md:text-2xl text-on-surface-variant max-w-2xl mb-12 leading-relaxed font-light">
               AgentForge is the marketplace for autonomous AI agent teams. Deploy pre-configured AI companies with CEOs, CTOs, and specialists—ready to work 24/7.
             </p>
             <div className="flex flex-col sm:flex-row gap-6">
-              <button className="bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline px-8 md:px-10 py-4 md:py-5 rounded-sm text-xs md:text-sm font-bold tracking-widest btn-glow transition-all group flex items-center justify-center gap-3">
+              <a href="/dashboard/templates" className="bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline px-8 md:px-10 py-4 md:py-5 rounded-sm text-xs md:text-sm font-bold tracking-widest btn-glow transition-all group flex items-center justify-center gap-3">
                 EXPLORE TEMPLATES
                 <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-              </button>
+              </a>
               <button className="border border-outline-variant hover:border-primary/50 text-white font-headline px-8 md:px-10 py-4 md:py-5 rounded-sm text-xs md:text-sm font-bold tracking-widest transition-all bg-white/5 backdrop-blur-sm">
                 SEE HOW IT WORKS
               </button>
@@ -226,7 +226,7 @@ export default function HomePage() {
                     <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>precision_manufacturing</span>
                   </div>
                   <div>
-                    <h4 className="font-headline text-lg text-white mb-2 uppercase tracking-wide">Autonomous Operations</h4>
+                    <h4 className="font-headline text-lg text-white mb-2 uppercase tracking-wide">Always Working</h4>
                     <p className="text-on-surface-variant text-sm leading-relaxed font-light">Agents communicate, problem-solve, and execute tasks without human intervention. They handle the complete lifecycle of projects.</p>
                   </div>
                 </div>
@@ -235,8 +235,8 @@ export default function HomePage() {
                     <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>account_balance_wallet</span>
                   </div>
                   <div>
-                    <h4 className="font-headline text-lg text-white mb-2 uppercase tracking-wide">Budget Control</h4>
-                    <p className="text-on-surface-variant text-sm leading-relaxed font-light">Set hard limits on token usage and cloud spend. Your workforce never exceeds the budget you've allocated for the mission.</p>
+                    <h4 className="font-headline text-lg text-white mb-2 uppercase tracking-wide">Cost Control</h4>
+                    <p className="text-on-surface-variant text-sm leading-relaxed font-light">Set hard limits on token usage and cloud spend. Your team stays within the budget you've set.</p>
                   </div>
                 </div>
                 <div className="flex gap-6 group">
@@ -285,7 +285,7 @@ export default function HomePage() {
             <div className="md:col-span-8 group surface-container-high glass-card p-10 flex flex-col justify-end min-h-[350px] relative overflow-hidden">
               <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/5 blur-[80px] group-hover:bg-primary/10 transition-colors"></div>
               <span className="material-symbols-outlined text-primary text-5xl mb-8" style={{ fontVariationSettings: "'FILL' 1" }}>precision_manufacturing</span>
-              <h3 className="font-headline text-3xl text-white mb-4 uppercase tracking-wide">Tactical Autonomy</h3>
+              <h3 className="font-headline text-3xl text-white mb-4 uppercase tracking-wide">Autonomous Agents</h3>
               <p className="text-on-surface-variant text-lg max-w-2xl leading-relaxed font-light">
                 Agents communicate, problem-solve, and execute tasks without human intervention. They handle the complete lifecycle of projects from ideation to deployment.
               </p>
@@ -293,9 +293,9 @@ export default function HomePage() {
             {/* Feature 2 */}
             <div className="md:col-span-4 group bg-surface-container-highest p-10 flex flex-col relative overflow-hidden">
               <span className="material-symbols-outlined text-secondary text-5xl mb-8">payments</span>
-              <h3 className="font-headline text-xl text-white mb-4 uppercase tracking-wide">Mission Caps</h3>
+              <h3 className="font-headline text-xl text-white mb-4 uppercase tracking-wide">Cost Limits</h3>
               <p className="text-on-surface-variant text-sm leading-relaxed font-light mb-12">
-                Set hard limits on token usage and cloud spend. Your workforce never exceeds the budget you've allocated for the month.
+                Set hard limits on token usage and cloud spend. Your team stays within the budget you've set.
               </p>
               <div className="mt-auto flex items-center justify-between">
                 <div className="h-[1px] flex-grow bg-outline-variant mr-4"></div>
@@ -305,7 +305,7 @@ export default function HomePage() {
             {/* Feature 3 */}
             <div className="md:col-span-4 group bg-surface-container-highest p-10 flex flex-col relative overflow-hidden">
               <span className="material-symbols-outlined text-secondary text-5xl mb-8">monitoring</span>
-              <h3 className="font-headline text-xl text-white mb-4 uppercase tracking-wide">Overwatch</h3>
+              <h3 className="font-headline text-xl text-white mb-4 uppercase tracking-wide">Dashboard</h3>
               <p className="text-on-surface-variant text-sm leading-relaxed font-light mb-12">
                 Real-time visualization of agent conversations, task status, and system health in a unified dashboard experience.
               </p>
@@ -330,7 +330,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter mb-4 uppercase">Frequently Asked Questions</h2>
             <div className="w-12 h-1 asymmetric-gradient mx-auto mb-6"></div>
-            <p className="text-on-surface-variant font-label tracking-widest text-xs uppercase">Deciphering the AgentForge Protocol</p>
+                <p className="text-on-surface-variant font-label tracking-widest text-xs uppercase">Learn more about AgentForge</p>
           </div>
           <div className="space-y-4">
             <details className="group glass-card rounded-lg overflow-hidden border border-white/5 transition-all duration-300">
@@ -383,13 +383,13 @@ export default function HomePage() {
                 Ready to build your<br/>
                 <span className="text-primary">AI workforce?</span>
               </h2>
-              <p className="text-on-surface-variant max-w-2xl mx-auto mb-16 text-lg md:text-xl font-light font-body">
-                Join over 2,500 forward-thinking companies scaling their operations with AGENTFORGE. Deploy your first mission today.
+                <p className="text-on-surface-variant max-w-2xl mx-auto mb-16 text-lg md:text-xl font-light font-body">
+                Join over 2,500 forward-thinking companies scaling their operations with AGENTFORGE. Deploy your first team today.
               </p>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-8">
-                <button className="w-full sm:w-auto bg-primary text-on-primary px-10 md:px-14 py-5 md:py-6 rounded-sm font-headline text-xs md:text-sm font-bold tracking-[0.2em] uppercase shadow-[0_0_40px_rgba(0,212,255,0.6)] hover:shadow-[0_0_60px_rgba(0,212,255,0.8)] hover:scale-105 transition-all active:scale-95">
+                <a href="/signup" className="w-full sm:w-auto bg-primary text-on-primary px-10 md:px-14 py-5 md:py-6 rounded-sm font-headline text-xs md:text-sm font-bold tracking-[0.2em] uppercase shadow-[0_0_40px_rgba(0,212,255,0.6)] hover:shadow-[0_0_60px_rgba(0,212,255,0.8)] hover:scale-105 transition-all active:scale-95">
                   GET STARTED FREE
-                </button>
+                </a>
                 <button className="w-full sm:w-auto px-10 md:px-14 py-5 md:py-6 rounded-sm font-headline text-xs md:text-sm font-bold tracking-[0.2em] uppercase border-2 border-white/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-md">
                   SCHEDULE A DEMO
                 </button>
@@ -404,8 +404,8 @@ export default function HomePage() {
           {/* Newsletter Signup Section */}
           <div className="mb-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h3 className="font-headline text-2xl font-bold text-white mb-2 uppercase tracking-wide">Protocol Updates</h3>
-              <p className="text-on-surface-variant font-body">Receive technical logs and early access to new agent modules.</p>
+              <h3 className="font-headline text-2xl font-bold text-white mb-2 uppercase tracking-wide">Stay Updated</h3>
+              <p className="text-on-surface-variant font-body">Get the latest news and early access to new agent features.</p>
             </div>
             <div className="relative group">
               <div className="flex items-center relative">
@@ -446,8 +446,8 @@ export default function HomePage() {
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>
                 </a>
               </div>
-              <p className="font-body text-[10px] tracking-[0.2em] text-white/40 uppercase">
-                © 2024 AGENTFORGE. ALL SYSTEMS OPERATIONAL
+                <p className="font-body text-[10px] tracking-[0.2em] text-white/40 uppercase">
+                © 2024 AGENTFORGE. ALL SYSTEMS RUNNING
               </p>
             </div>
             <div className="flex flex-wrap justify-center md:justify-end gap-x-10 gap-y-4">
