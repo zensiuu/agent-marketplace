@@ -45,7 +45,7 @@ AUTH0_A2A_CLIENT_ID='t0ETzvCOxxuAlC0pEYUO2wEw2cE8H3eY'
 AUTH0_A2A_CLIENT_SECRET='CimJKTlikeFxs-YasJ0gG5qEUPsNb0vI_FjkJki0PzPN40gjWZA5Ea9unxvGTjVp'
 
 # PAPERCLIP
-PAPERCLIP_API_URL=https://api.paperclip.ai
+PAPERCLIP_API_URL=https://api.paperclip.ing
 PAPERCLIP_API_KEY=your-paperclip-api-key
 
 # DATABASE
@@ -62,7 +62,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/agentforge
 |---|------|---------|------------------|
 | 1.2.1 | □ Test Auth0 connectivity | `curl -I https://agentforge-hub.eu.auth0.com/.well-known/openid-configuration` | 200 OK response with OIDC config |
 | 1.2.2 | □ Test Auth0 Token Vault API | `curl -I https://agentforge-hub.auth0.com/` | Connection successful |
-| 1.2.3 | □ Test Paperclip API | `curl -I https://api.paperclip.ai` | API reachable |
+| 1.2.3 | □ Test Paperclip API | `curl -I https://api.paperclip.ing` | API reachable |
 | 1.2.4 | □ Test local Next.js server | `curl -I http://localhost:3000` | 200 OK or 302 redirect |
 | 1.2.5 | □ Test PostgreSQL (if configured) | `pg_isready -h localhost -p 5432` or connection test | "accepting connections" |
 
@@ -75,7 +75,7 @@ echo -n "Auth0: "
 curl -s -o /dev/null -w "%{http_code}" https://agentforge-hub.eu.auth0.com/.well-known/openid-configuration
 
 echo -n " | Paperclip: "
-curl -s -o /dev/null -w "%{http_code}" https://api.paperclip.ai
+curl -s -o /dev/null -w "%{http_code}" https://api.paperclip.ing
 
 echo -n " | Local Server: "
 curl -s -o /dev/null -w "%{http_code}" http://localhost:3000

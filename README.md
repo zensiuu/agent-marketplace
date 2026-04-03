@@ -19,7 +19,7 @@ Deploy pre-built AI agent teams — your digital employees that work 24/7
 
 ## What is AgentForge?
 
-AgentForge is an **AI agent marketplace** where users browse, purchase, and deploy pre-built AI agent companies that run on [Paperclip.ai](https://paperclip.ai) orchestration layer. We're also participating in the **Auth0 for AI Agents Hackathon** (April 2026).
+AgentForge is an **AI agent marketplace** where users browse, purchase, and deploy pre-built AI agent companies that run on [Paperclip.ai](https://paperclip.ing) orchestration layer. We're also participating in the **Auth0 for AI Agents Hackathon** (April 2026).
 
 ### The Analogy
 
@@ -154,7 +154,7 @@ Create a `.env.local` file with the following variables:
 | `AUTH0_CLIENT_SECRET` | Auth0 client secret | Yes |
 | `SUPABASE_URL` | Supabase project URL | Yes |
 | `SUPABASE_ANON_KEY` | Supabase anonymous key | Yes |
-| `PAPERCLIP_API_URL` | Paperclip API endpoint (`https://api.paperclip.ai`) | Yes |
+| `PAPERCLIP_API_URL` | Paperclip API endpoint (`https://api.paperclip.ing`) | Yes |
 | `PAPERCLIP_API_KEY` | Paperclip API key | Yes |
 
 ---

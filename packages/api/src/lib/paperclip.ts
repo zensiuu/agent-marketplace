@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const PAPERCLIP_API_URL = process.env.PAPERCLIP_API_URL || 'https://api.paperclip.ai';
+const PAPERCLIP_API_URL = process.env.PAPERCLIP_API_URL || 'https://api.paperclip.ing';
 const PAPERCLIP_API_KEY = process.env.PAPERCLIP_API_KEY;
 
 if (!PAPERCLIP_API_KEY) {
