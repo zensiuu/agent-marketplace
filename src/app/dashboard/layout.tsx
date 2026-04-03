@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 const navigation = [
   { 
@@ -50,8 +51,44 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { user, isLoading } = useUser();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (href: string) => pathname === href;
+
+  const getInitials = (name: string | undefined) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
+  if (!mounted || isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/api/auth/login';
+    }
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Redirecting to login...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex">
@@ -99,11 +136,13 @@ export default function DashboardLayout({
           <div className="glass-card p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold">
-                U
+                {getInitials(user.name)}
               </div>
-              <div className="flex-1">
-                <p className="text-sm text-white" style={{ fontFamily: 'Rajdhani, sans-serif' }}>User</p>
-                <p className="text-xs text-gray-500">user@example.com</p>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-white truncate" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                  {user.name || user.email || 'User'}
+                </p>
+                <p className="text-xs text-gray-500 truncate">{user.email}</p>
               </div>
               <a 
                 href="/api/auth/logout" 

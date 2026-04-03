@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'AGENTFORGE | Professional AI Workforce Marketplace',
@@ -125,7 +126,9 @@ export default function RootLayout({
         `}} />
       </head>
       <body className="bg-background text-on-background font-body selection:bg-primary selection:text-on-primary overflow-x-hidden">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
