@@ -8,7 +8,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     // Redirect to Auth0 login
-    window.location.href = '/api/auth/login';
+    window.location.href = '/auth/login';
   }, []);
 
   return (

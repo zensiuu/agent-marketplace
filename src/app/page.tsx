@@ -21,7 +21,7 @@ export default function HomePage() {
             <a className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-sm text-white/70 hover:text-white transition-colors" href="/docs">DOCS</a>
           </div>
           <div className="flex items-center gap-4 md:gap-6">
-            <a href="/api/auth/login" className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[10px] md:text-xs text-white/70 hover:text-white transition-colors">LOGIN</a>
+            <a href="/auth/login" className="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[10px] md:text-xs text-white/70 hover:text-white transition-colors">LOGIN</a>
             <a href="/signup" className="bg-gradient-to-br from-primary to-primary-dim text-on-primary font-['Space_Grotesk'] px-4 md:px-6 py-2 md:py-2.5 rounded-sm text-[10px] md:text-xs font-bold tracking-widest btn-glow transition-all active:scale-95">
               GET STARTED
             </a>

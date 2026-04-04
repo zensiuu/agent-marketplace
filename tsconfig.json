@@ -40,8 +40,9 @@
     "src/**/*",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
+"exclude": [
     "node_modules",
-    ".paperclip-reference"
+    ".paperclip-reference",
+    "packages/api"
   ]
 }
