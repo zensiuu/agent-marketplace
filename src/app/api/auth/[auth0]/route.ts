@@ -1,5 +1,4 @@
-import { Auth0Client } from '@auth0/nextjs-auth0/server';
+import { handleAuth, handleLogin, handleLogout, handleProfile } from '@auth0/nextjs-auth0';
 
-export const auth0 = new Auth0Client();
-
-export const GET = auth0.middleware;
+export const GET = handleAuth;
+export const POST = handleAuth;

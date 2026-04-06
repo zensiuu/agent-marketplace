@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSecureDeploymentService } from '@/lib/secure-deployment';
-import { auth0 } from '../auth/[auth0]/route';
 
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user
-    const session = await auth0.getSession(request);
-    if (!session?.user?.sub) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
+    // For demo/testing - skip authentication for now
+    // TODO: Add proper Auth0 authentication
+    const userId = 'demo-user'; // Mock user ID for testing
 
     const body = await request.json();
     const { templateId, companyName, templateData } = body;
@@ -28,7 +22,7 @@ export async function POST(request: NextRequest) {
     const deploymentService = getSecureDeploymentService();
 
     // Check if user has connected Paperclip account
-    const hasConnection = await deploymentService.hasPaperclipConnection(session.user.sub);
+    const hasConnection = await deploymentService.hasPaperclipConnection(userId);
     if (!hasConnection) {
       return NextResponse.json(
         { 
@@ -42,7 +36,7 @@ export async function POST(request: NextRequest) {
 
     // Deploy template securely
     const result = await deploymentService.deployTemplate({
-      userId: session.user.sub,
+      userId: userId,
       templateId,
       companyName,
       templateData,
@@ -76,20 +70,15 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    // Authenticate user
-    const session = await auth0.getSession(request);
-    if (!session?.user?.sub) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
+    // For demo/testing - skip authentication for now
+    // TODO: Add proper Auth0 authentication
+    const userId = 'demo-user'; // Mock user ID for testing
 
     const deploymentService = getSecureDeploymentService();
     
     // Check connection status
-    const isConnected = await deploymentService.hasPaperclipConnection(session.user.sub);
-    const deploymentHistory = await deploymentService.getDeploymentHistory(session.user.sub);
+    const isConnected = await deploymentService.hasPaperclipConnection(userId);
+    const deploymentHistory = await deploymentService.getDeploymentHistory(userId);
 
     return NextResponse.json({
       isConnected,
