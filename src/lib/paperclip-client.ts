@@ -10,6 +10,7 @@ import type {
   DeployTemplateRequest,
   DeployTemplateResponse
 } from '@/types/paperclip';
+import { getSecureDeploymentService } from './secure-deployment';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -104,10 +105,21 @@ export const paperclipApi = {
   },
 
   async deployTemplate(request: DeployTemplateRequest): Promise<DeployTemplateResponse> {
-    return fetchApi<DeployTemplateResponse>('/api/paperclip/deploy-template', {
+    // Use secure deployment API instead of direct Paperclip API
+    const response = await fetch('/api/deploy', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(request),
     });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: 'Request failed' }));
+      throw new Error(error.error || `Deployment error ${response.status}`);
+    }
+
+    return response.json();
   },
 };
 
