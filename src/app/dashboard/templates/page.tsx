@@ -124,7 +124,11 @@ export default function TemplatesPage() {
                 </span>
                 <span className="text-sm text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif' }}>/month</span>
               </div>
-              <button className="btn-deploy">
+              <button 
+                onClick={() => window.location.href = '/dashboard/deploy'}
+                className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:opacity-90 font-medium text-sm"
+                style={{ fontFamily: 'Rajdhani, sans-serif' }}
+              >
                 Deploy Now
               </button>
             </div>
