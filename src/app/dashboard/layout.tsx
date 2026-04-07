@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -59,27 +59,133 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Initialize sidebar state from localStorage and detect mobile
+  useEffect(() => {
+    setIsMounted(true);
+    
+    // Check for saved sidebar state
+    const savedState = localStorage.getItem('sidebar-open');
+    if (savedState !== null) {
+      setSidebarOpen(savedState === 'true');
+    }
+    
+    // Check if mobile
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (mobile) {
+        setSidebarOpen(false);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Save sidebar state to localStorage
+  useEffect(() => {
+    if (isMounted) {
+      localStorage.setItem('sidebar-open', String(sidebarOpen));
+    }
+  }, [sidebarOpen, isMounted]);
+
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen(prev => !prev);
+  }, []);
 
   const isActive = (href: string) => pathname === href;
 
-  return (
-    <div className="min-h-screen bg-[#0a0a0a] flex">
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-white/5 bg-[#0a0a0a] flex flex-col">
-        {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b border-white/5">
-          <Link href="/">
-            <span 
-              className="text-xl font-bold"
-              style={{ fontFamily: 'Orbitron, sans-serif', color: '#00d4ff', letterSpacing: '2px' }}
-            >
+  // Prevent flash of incorrect state
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex">
+        <div className="w-64 border-r border-white/5 bg-[#0a0a0a] flex flex-col">
+          <div className="h-16 flex items-center px-6 border-b border-white/5">
+            <span className="text-xl font-bold" style={{ fontFamily: 'Orbitron, sans-serif', color: '#00d4ff', letterSpacing: '2px' }}>
               AGENT<span style={{ color: '#ffffff' }}>FORGE</span>
             </span>
-          </Link>
+          </div>
+        </div>
+        <main className="flex-1 overflow-auto">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] flex">
+      {/* Mobile Overlay */}
+      {isMobile && sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300"
+          onClick={toggleSidebar}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Sidebar - Fixed/Sticky, collapsible */}
+      <aside 
+        className={`
+          fixed top-0 left-0 h-screen z-40
+          bg-[#0a0a0a] border-r border-white/5 flex flex-col
+          transition-all duration-300 ease-in-out
+          ${sidebarOpen ? 'w-64 translate-x-0' : 'w-20 -translate-x-full lg:translate-x-0 lg:w-20'}
+        `}
+      >
+        {/* Logo */}
+        <div className="h-16 flex items-center border-b border-white/5 relative">
+          {/* Mobile Toggle Button */}
+          <button
+            onClick={toggleSidebar}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-white/10 transition-colors z-50 lg:hidden"
+            aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+          >
+            <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              {sidebarOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+
+          {/* Desktop Toggle Button */}
+          <button
+            onClick={toggleSidebar}
+            className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 items-center justify-center rounded-full bg-[#0a0a0a] border border-white/20 hover:border-cyan-500/50 transition-colors z-50"
+            aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+          >
+            <svg 
+              className={`w-3 h-3 text-gray-400 transition-transform duration-300 ${sidebarOpen ? '' : 'rotate-180'}`} 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor" 
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div className={`flex items-center px-6 transition-all duration-300 ${sidebarOpen ? 'opacity-100' : 'lg:opacity-0'}`}>
+            <Link href="/">
+              <span 
+                className="text-xl font-bold whitespace-nowrap"
+                style={{ fontFamily: 'Orbitron, sans-serif', color: '#00d4ff', letterSpacing: '2px' }}
+              >
+                AGENT<span style={{ color: '#ffffff' }}>FORGE</span>
+              </span>
+            </Link>
+          </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navigation.map((item) => (
             <Link
               key={item.href}
@@ -90,11 +196,16 @@ export default function DashboardLayout({
                   ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30' 
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }
+                ${sidebarOpen ? 'justify-start' : 'lg:justify-center lg:px-0'}
               `}
+              title={!sidebarOpen ? item.name : undefined}
             >
-              <span>{item.icon}</span>
+              <span className={sidebarOpen ? '' : 'lg:mx-auto'}>{item.icon}</span>
               <span 
-                className="text-sm font-medium"
+                className={`
+                  text-sm font-medium whitespace-nowrap
+                  ${sidebarOpen ? 'opacity-100' : 'lg:opacity-0 lg:w-0'}
+                `}
                 style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '1px' }}
               >
                 {item.name}
@@ -105,12 +216,18 @@ export default function DashboardLayout({
 
         {/* User section */}
         <div className="p-4 border-t border-white/5">
-          <div className="glass-card p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold">
+          <div className={`
+            glass-card p-4 transition-all duration-300
+            ${sidebarOpen ? '' : 'lg:p-2'}
+          `}>
+            <div className={`flex items-center gap-3 ${sidebarOpen ? '' : 'lg:justify-center'}`}>
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold flex-shrink-0">
                 D
               </div>
-              <div className="flex-1 min-w-0">
+              <div className={`
+                flex-1 min-w-0 transition-all duration-300
+                ${sidebarOpen ? 'opacity-100' : 'lg:opacity-0 lg:w-0'}
+              `}>
                 <p className="text-sm text-white truncate" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
                   Demo User
                 </p>
@@ -121,8 +238,29 @@ export default function DashboardLayout({
         </div>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 overflow-auto">
+      {/* Main content - adjusted margin when sidebar is collapsed on desktop */}
+      <main className={`
+        flex-1 min-h-screen transition-all duration-300
+        ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}
+      `}>
+        {/* Top bar for mobile */}
+        <div className="lg:hidden h-16 flex items-center px-4 border-b border-white/5 bg-[#0a0a0a]/95 backdrop-blur-sm sticky top-0 z-20">
+          <button
+            onClick={toggleSidebar}
+            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+          >
+            <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <span 
+            className="ml-4 text-lg font-bold text-white"
+            style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '2px' }}
+          >
+            AGENT<span className="text-cyan-400">FORGE</span>
+          </span>
+        </div>
         {children}
       </main>
     </div>
