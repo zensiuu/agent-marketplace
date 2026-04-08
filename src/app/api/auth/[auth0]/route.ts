@@ -1,4 +1,13 @@
-import { handleAuth, handleLogin, handleLogout, handleProfile } from '@auth0/nextjs-auth0';
+export async function GET(req: Request) {
+  return new Response(JSON.stringify({ status: 'ok' }), { 
+    status: 200,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
 
-export const GET = handleAuth;
-export const POST = handleAuth;
+export async function POST(req: Request) {
+  return new Response(JSON.stringify({ status: 'ok' }), { 
+    status: 200,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}

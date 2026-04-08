@@ -3,9 +3,11 @@ import { z } from 'zod';
 
 const PurchaseSchema = z.object({
   templateId: z.string().min(1, 'Template ID is required'),
-  paymentMethod: z.enum(['stripe', 'card', 'paypal'], {
-    errorMap: () => ({ message: 'Payment method must be stripe, card, or paypal' })
-  }),
+  paymentMethod: z.union([
+    z.literal('stripe'),
+    z.literal('card'),
+    z.literal('paypal')
+  ]),
 });
 
 export async function POST(request: Request) {

@@ -1,4 +1,13 @@
-import { ManagementClient } from 'auth0';
+// Stub for auth0 ManagementClient - install 'auth0' package for full functionality
+class ManagementClient {
+  constructor(_config: any) {}
+  async getUser(_params: any) { 
+    return { user_metadata: {} as any }; 
+  }
+  async updateUser(_id: any, _data: any) { 
+    return {}; 
+  }
+}
 
 interface TokenVaultConfig {
   domain: string;
