@@ -1,11 +1,143 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
+import { useState } from 'react';
+import { createSupabaseClient } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
-  const handleSocialLogin = async (provider: string) => {
-    await signIn(provider, { callbackUrl: '/dashboard' });
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [company, setCompany] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const supabase = createSupabaseClient();
+
+    // Step 1: Sign up the user with Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name,
+          company,
+        },
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+
+    if (authError) {
+      setError(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    if (!authData.user) {
+      setError('Failed to create user');
+      setLoading(false);
+      return;
+    }
+
+    // Step 2: Create customer record in the database
+    try {
+      const response = await fetch('/api/auth/create-customer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: authData.user.id,
+          email,
+          name,
+          company,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to create customer record');
+        // User was created in Auth, but customer record failed
+        // Don't block signup - just log the error
+      }
+    } catch (err) {
+      console.error('Customer creation error:', err);
+      // Don't block signup if customer creation fails
+    }
+
+    setSuccess(true);
+    setLoading(false);
   };
+
+  const handleOAuthSignup = async (provider: 'github' | 'google') => {
+    const supabase = createSupabaseClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        callbackUrl: `${window.location.origin}/api/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleMagicLink = async () => {
+    if (!email) {
+      setError('Please enter your email address first');
+      return;
+    }
+
+    setLoading(true);
+    const supabase = createSupabaseClient();
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      setSuccess(true);
+      setError(null);
+    }
+    setLoading(false);
+  };
+
+  if (success) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] px-4">
+        <div className="w-full max-w-md text-center">
+          <div className="glass-card p-8">
+            <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+              Check Your Email!
+            </h2>
+            <p className="text-gray-400" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+              We've sent you a confirmation link. Click it to activate your account.
+            </p>
+            <div className="mt-6">
+              <a href="/login" className="text-cyan-400 hover:text-cyan-300" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                Back to login
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] px-4">
@@ -29,9 +161,88 @@ export default function SignupPage() {
             CREATE ACCOUNT
           </h2>
 
-          <div className="space-y-4">
+          {error && (
+            <div className="mb-4 p-3 bg-red-500/10 text-red-400 border border-red-500/30 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSignup} className="space-y-4">
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                style={{ fontFamily: 'Rajdhani, sans-serif' }}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                style={{ fontFamily: 'Rajdhani, sans-serif' }}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                Company (optional)
+              </label>
+              <input
+                type="text"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                style={{ fontFamily: 'Rajdhani, sans-serif' }}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                style={{ fontFamily: 'Rajdhani, sans-serif' }}
+                required
+                minLength={6}
+              />
+            </div>
+
             <button
-              onClick={() => handleSocialLogin('github')}
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+              style={{ fontFamily: 'Rajdhani, sans-serif' }}
+            >
+              {loading ? 'Creating account...' : 'Create Account'}
+            </button>
+          </form>
+
+          <div className="my-4 flex items-center gap-4">
+            <div className="flex-1 h-px bg-gray-700"></div>
+            <span className="text-sm text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif' }}>or</span>
+            <div className="flex-1 h-px bg-gray-700"></div>
+          </div>
+
+          <div className="space-y-3">
+            <button
+              onClick={() => handleOAuthSignup('github')}
               className="w-full py-3 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-3"
               style={{ fontFamily: 'Rajdhani, sans-serif' }}
             >
@@ -42,7 +253,7 @@ export default function SignupPage() {
             </button>
 
             <button
-              onClick={() => handleSocialLogin('google')}
+              onClick={() => handleOAuthSignup('google')}
               className="w-full py-3 bg-white hover:bg-gray-100 text-gray-900 font-medium rounded-lg transition-colors flex items-center justify-center gap-3"
               style={{ fontFamily: 'Rajdhani, sans-serif' }}
             >
@@ -54,21 +265,23 @@ export default function SignupPage() {
               </svg>
               Continue with Google
             </button>
+
+            <button
+              onClick={handleMagicLink}
+              disabled={loading}
+              className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+              style={{ fontFamily: 'Rajdhani, sans-serif' }}
+            >
+              Send Magic Link
+            </button>
           </div>
 
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
               Already have an account? 
-              <a href="/login" className="text-cyan-400 hover:text-cyan-300 ml-1">
+              <a href="/login" className="text-cyan-400 hover:text-cyan-3 ml-1">
                 Login
               </a>
-            </p>
-          </div>
-
-          {/* Setup Notice */}
-          <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <p className="text-xs text-blue-400 text-center" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
-              Need to set up OAuth providers? Add GITHUB_CLIENT_ID and GOOGLE_CLIENT_ID to your environment variables
             </p>
           </div>
         </div>

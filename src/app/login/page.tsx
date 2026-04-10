@@ -1,10 +1,72 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
+import { useState } from 'react';
+import { createSupabaseClient } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const handleSocialLogin = async (provider: string) => {
-    await signIn(provider, { callbackUrl: '/dashboard' });
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const supabase = createSupabaseClient();
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+    } else {
+      router.push('/dashboard');
+    }
+  };
+
+  const handleOAuthLogin = async (provider: 'github' | 'google') => {
+    const supabase = createSupabaseClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        callbackUrl: `${window.location.origin}/dashboard`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleMagicLink = async () => {
+    if (!email) {
+      setError('Please enter your email address first');
+      return;
+    }
+
+    setLoading(true);
+    const supabase = createSupabaseClient();
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      setError('Check your email for the magic link!');
+    }
+    setLoading(false);
   };
 
   return (
@@ -29,9 +91,60 @@ export default function LoginPage() {
             WELCOME BACK
           </h2>
 
-          <div className="space-y-4">
+          {error && (
+            <div className={`mb-4 p-3 rounded-lg text-sm ${error.includes('Check') ? 'bg-green-500/10 text-green-400 border border-green-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'}`}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleEmailLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                style={{ fontFamily: 'Rajdhani, sans-serif' }}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
+                style={{ fontFamily: 'Rajdhani, sans-serif' }}
+                required
+              />
+            </div>
+
             <button
-              onClick={() => handleSocialLogin('github')}
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+              style={{ fontFamily: 'Rajdhani, sans-serif' }}
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
+
+          <div className="my-4 flex items-center gap-4">
+            <div className="flex-1 h-px bg-gray-700"></div>
+            <span className="text-sm text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif' }}>or</span>
+            <div className="flex-1 h-px bg-gray-700"></div>
+          </div>
+
+          <div className="space-y-3">
+            <button
+              onClick={() => handleOAuthLogin('github')}
               className="w-full py-3 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-3"
               style={{ fontFamily: 'Rajdhani, sans-serif' }}
             >
@@ -42,7 +155,7 @@ export default function LoginPage() {
             </button>
 
             <button
-              onClick={() => handleSocialLogin('google')}
+              onClick={() => handleOAuthLogin('google')}
               className="w-full py-3 bg-white hover:bg-gray-100 text-gray-900 font-medium rounded-lg transition-colors flex items-center justify-center gap-3"
               style={{ fontFamily: 'Rajdhani, sans-serif' }}
             >
@@ -54,6 +167,15 @@ export default function LoginPage() {
               </svg>
               Continue with Google
             </button>
+
+            <button
+              onClick={handleMagicLink}
+              disabled={loading}
+              className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+              style={{ fontFamily: 'Rajdhani, sans-serif' }}
+            >
+              Send Magic Link
+            </button>
           </div>
 
           <div className="mt-6 text-center">
@@ -62,13 +184,6 @@ export default function LoginPage() {
               <a href="/signup" className="text-cyan-400 hover:text-cyan-300 ml-1">
                 Sign up
               </a>
-            </p>
-          </div>
-
-          {/* Setup Notice */}
-          <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <p className="text-xs text-blue-400 text-center" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
-              Need to set up OAuth providers? Add GITHUB_CLIENT_ID and GOOGLE_CLIENT_ID to your environment variables
             </p>
           </div>
         </div>

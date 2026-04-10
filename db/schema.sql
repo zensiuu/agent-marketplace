@@ -6,7 +6,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =====================================================
 -- CUSTOMERS TABLE
--- User profiles linked to Auth0 and Stripe
+-- User profiles linked to Supabase Auth and Stripe
 -- =====================================================
 CREATE TABLE customers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -14,7 +14,7 @@ CREATE TABLE customers (
     name VARCHAR(255) NOT NULL,
     company VARCHAR(255),
     stripe_customer_id VARCHAR(255),
-    auth0_id VARCHAR(255), -- Auth0 user identifier
+    supabase_id VARCHAR(255), -- Supabase Auth user identifier
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
