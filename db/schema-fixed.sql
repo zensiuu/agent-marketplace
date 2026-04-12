@@ -1,5 +1,5 @@
--- AgentForge PostgreSQL Schema
--- Run this after creating your database: psql $DATABASE_URL -f db/schema.sql
+-- AgentForge PostgreSQL Schema (FIXED)
+-- Run this after creating your database: psql $DATABASE_URL -f db/schema-fixed.sql
 
 -- Enable UUID extension for generating UUIDs
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -8,7 +8,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- CUSTOMERS TABLE
 -- User profiles linked to Supabase Auth and Stripe
 -- =====================================================
-CREATE TABLE customers (
+CREATE TABLE IF NOT EXISTS customers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -20,14 +20,14 @@ CREATE TABLE customers (
 );
 
 -- Index for email lookups
-CREATE INDEX idx_customers_email ON customers(email);
-CREATE INDEX idx_customers_stripe ON customers(stripe_customer_id) WHERE stripe_customer_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_customers_email ON customers(email);
+CREATE INDEX IF NOT EXISTS idx_customers_stripe ON customers(stripe_customer_id) WHERE stripe_customer_id IS NOT NULL;
 
 -- =====================================================
 -- TEMPLATES TABLE
 -- Agent templates marketplace
 -- =====================================================
-CREATE TABLE templates (
+CREATE TABLE IF NOT EXISTS templates (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
@@ -41,15 +41,15 @@ CREATE TABLE templates (
 );
 
 -- Index for category filtering and active templates
-CREATE INDEX idx_templates_category ON templates(category);
-CREATE INDEX idx_templates_active ON templates(is_active) WHERE is_active = true;
-CREATE INDEX idx_templates_price ON templates(price);
+CREATE INDEX IF NOT EXISTS idx_templates_category ON templates(category);
+CREATE INDEX IF NOT EXISTS idx_templates_active ON templates(is_active) WHERE is_active = true;
+CREATE INDEX IF NOT EXISTS idx_templates_price ON templates(price);
 
 -- =====================================================
 -- PURCHASES TABLE
 -- Template purchase records
 -- =====================================================
-CREATE TABLE purchases (
+CREATE TABLE IF NOT EXISTS purchases (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     template_id UUID NOT NULL REFERENCES templates(id) ON DELETE RESTRICT,
@@ -63,16 +63,16 @@ CREATE TABLE purchases (
 );
 
 -- Index for customer purchase history
-CREATE INDEX idx_purchases_customer ON purchases(customer_id);
-CREATE INDEX idx_purchases_template ON purchases(template_id);
-CREATE INDEX idx_purchases_status ON purchases(status);
-CREATE INDEX idx_purchases_stripe ON purchases(stripe_payment_id) WHERE stripe_payment_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_purchases_customer ON purchases(customer_id);
+CREATE INDEX IF NOT EXISTS idx_purchases_template ON purchases(template_id);
+CREATE INDEX IF NOT EXISTS idx_purchases_status ON purchases(status);
+CREATE INDEX IF NOT EXISTS idx_purchases_stripe ON purchases(stripe_payment_id) WHERE stripe_payment_id IS NOT NULL;
 
 -- =====================================================
 -- DEPLOYMENTS TABLE
 -- Deployed agent companies via Paperclip
 -- =====================================================
-CREATE TABLE deployments (
+CREATE TABLE IF NOT EXISTS deployments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     template_id UUID REFERENCES templates(id) ON DELETE SET NULL,
@@ -86,15 +86,15 @@ CREATE TABLE deployments (
 );
 
 -- Index for customer deployments
-CREATE INDEX idx_deployments_customer ON deployments(customer_id);
-CREATE INDEX idx_deployments_status ON deployments(status);
-CREATE INDEX idx_deployments_paperclip ON deployments(paperclip_company_id) WHERE paperclip_company_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_deployments_customer ON deployments(customer_id);
+CREATE INDEX IF NOT EXISTS idx_deployments_status ON deployments(status);
+CREATE INDEX IF NOT EXISTS idx_deployments_paperclip ON deployments(paperclip_company_id) WHERE paperclip_company_id IS NOT NULL;
 
 -- =====================================================
 -- INTERACTIONS TABLE
 -- Customer interaction logs for memory/analytics
 -- =====================================================
-CREATE TABLE interactions (
+CREATE TABLE IF NOT EXISTS interactions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     type VARCHAR(50) NOT NULL CHECK (type IN ('chat', 'support_ticket', 'email', 'purchase', 'deployment', 'api_call', 'page_view')),
@@ -104,15 +104,15 @@ CREATE TABLE interactions (
 );
 
 -- Index for customer interaction history (descending for recent first)
-CREATE INDEX idx_interactions_customer ON interactions(customer_id, created_at DESC);
-CREATE INDEX idx_interactions_type ON interactions(type);
-CREATE INDEX idx_interactions_created ON interactions(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_interactions_customer ON interactions(customer_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_interactions_type ON interactions(type);
+CREATE INDEX IF NOT EXISTS idx_interactions_created ON interactions(created_at DESC);
 
 -- =====================================================
 -- AGENT_TOKENS TABLE
 -- Encrypted API tokens for Token Vault (connected services)
 -- =====================================================
-CREATE TABLE agent_tokens (
+CREATE TABLE IF NOT EXISTS agent_tokens (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     service_name VARCHAR(100) NOT NULL,
@@ -129,9 +129,9 @@ CREATE TABLE agent_tokens (
 );
 
 -- Index for token lookups
-CREATE INDEX idx_agent_tokens_customer ON agent_tokens(customer_id);
-CREATE INDEX idx_agent_tokens_service ON agent_tokens(service_name);
-CREATE UNIQUE INDEX idx_agent_tokens_active ON agent_tokens(customer_id, service_name) WHERE is_active = true;
+CREATE INDEX IF NOT EXISTS idx_agent_tokens_customer ON agent_tokens(customer_id);
+CREATE INDEX IF NOT EXISTS idx_agent_tokens_service ON agent_tokens(service_name);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_agent_tokens_active ON agent_tokens(customer_id, service_name) WHERE is_active = true;
 
 -- =====================================================
 -- TRIGGER: Auto-update updated_at timestamp
@@ -144,18 +144,23 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Apply to all tables with updated_at column
+-- Apply to all tables with updated_at column (drop existing triggers first)
+DROP TRIGGER IF EXISTS update_customers_updated_at ON customers;
 CREATE TRIGGER update_customers_updated_at BEFORE UPDATE ON customers
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_templates_updated_at ON templates;
 CREATE TRIGGER update_templates_updated_at BEFORE UPDATE ON templates
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_purchases_updated_at ON purchases;
 CREATE TRIGGER update_purchases_updated_at BEFORE UPDATE ON purchases
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_deployments_updated_at ON deployments;
 CREATE TRIGGER update_deployments_updated_at BEFORE UPDATE ON deployments
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_agent_tokens_updated_at ON agent_tokens;
 CREATE TRIGGER update_agent_tokens_updated_at BEFORE UPDATE ON agent_tokens
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
