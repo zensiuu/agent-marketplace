@@ -40,6 +40,7 @@ export async function GET(request: NextRequest) {
             email: email!,
             name: name as string || 'User',
             company: company as string || undefined,
+            supabase_id: user.id, // CRITICAL: Store Supabase Auth user ID
           });
           console.log('Created customer:', customer.id);
         } catch (err) {

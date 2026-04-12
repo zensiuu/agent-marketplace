@@ -78,13 +78,17 @@ export default function SignupPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        callbackUrl: `${window.location.origin}/api/auth/callback`,
+        redirectTo: `${window.location.origin}/api/auth/callback`,
       },
     });
 
     if (error) {
       setError(error.message);
+      return;
     }
+
+    // OAuth creates customer record via callback
+    // User will be redirected to dashboard after auth
   };
 
   const handleMagicLink = async () => {

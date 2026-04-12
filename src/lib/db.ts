@@ -99,7 +99,7 @@ export interface Customer {
   name: string;
   company: string | null;
   stripe_customer_id: string | null;
-  auth0_id: string | null;
+  supabase_id: string | null;
   created_at: Date;
   updated_at: Date;
 }
@@ -125,13 +125,13 @@ export async function createCustomer(data: {
   name: string;
   company?: string;
   stripe_customer_id?: string;
-  auth0_id?: string;
+  supabase_id?: string;
 }): Promise<Customer> {
   const result = await query<Customer>(
-    `INSERT INTO customers (email, name, company, stripe_customer_id, auth0_id)
+    `INSERT INTO customers (email, name, company, stripe_customer_id, supabase_id)
      VALUES ($1, $2, $3, $4, $5)
      RETURNING *`,
-    [data.email, data.name, data.company || null, data.stripe_customer_id || null, data.auth0_id || null]
+    [data.email, data.name, data.company || null, data.stripe_customer_id || null, data.supabase_id || null]
   );
   return result.rows[0];
 }

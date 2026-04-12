@@ -31,8 +31,7 @@ export async function POST(request: NextRequest) {
       email,
       name,
       company,
-      // Store Supabase user ID for future session lookups
-      // Note: In Supabase auth, you can look up users by their auth ID
+      supabase_id: userId, // CRITICAL: Store Supabase Auth user ID
     });
 
     return NextResponse.json({ customer });

@@ -124,14 +124,14 @@ CREATE TABLE agent_tokens (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     
-    -- Each service can only have one active token per customer
-    CONSTRAINT unique_active_service_per_customer UNIQUE (customer_id, service_name) WHERE is_active = true
+    -- Each service can only have one active token per customer (using partial unique index)
+    CONSTRAINT unique_active_service_per_customer UNIQUE (customer_id, service_name)
 );
 
 -- Index for token lookups
 CREATE INDEX idx_agent_tokens_customer ON agent_tokens(customer_id);
 CREATE INDEX idx_agent_tokens_service ON agent_tokens(service_name);
-CREATE INDEX idx_agent_tokens_active ON agent_tokens(is_active) WHERE is_active = true;
+CREATE UNIQUE INDEX idx_agent_tokens_active ON agent_tokens(customer_id, service_name) WHERE is_active = true;
 
 -- =====================================================
 -- TRIGGER: Auto-update updated_at timestamp
