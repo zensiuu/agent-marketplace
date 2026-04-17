@@ -19,7 +19,7 @@ interface DeploymentResult {
 export class SecureDeploymentService {
   async deployTemplate(options: SecureDeploymentOptions): Promise<DeploymentResult> {
     try {
-      // 1. Get Paperclip API token from Token Store
+      // 1. Get Paperclip API token from Token Store (decrypted)
       const paperclipToken = await tokenStore.getPaperclipToken(options.userId);
       
       if (!paperclipToken) {
@@ -114,15 +114,19 @@ export class SecureDeploymentService {
     try {
       const token = await tokenStore.getToken(userId, serviceName);
       if (token) {
-        await tokenStore.storeToken(
-          userId,
-          serviceName,
-          token.accessToken,
-          {
-            ...token.metadata,
-            ...usageData,
-          }
-        );
+        // Get the decrypted access token to re-store with updated metadata
+        const accessToken = await tokenStore.getDecryptedAccessToken(userId, serviceName);
+        if (accessToken) {
+          await tokenStore.storeToken(
+            userId,
+            serviceName,
+            accessToken,
+            {
+              ...token.metadata,
+              ...usageData,
+            }
+          );
+        }
       }
     } catch (error) {
       console.error('Failed to update token usage:', error);

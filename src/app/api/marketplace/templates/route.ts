@@ -1,6 +1,47 @@
 import { NextResponse } from 'next/server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
-const templates = [
+// Type for template from database
+interface Template {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  category: string | null;
+  features: unknown[] | null;
+  image_url: string | null;
+  is_active: boolean;
+  created_at: string;
+  seller_name: string | null;
+  rating: number | null;
+  downloads: number | null;
+}
+
+// Transform database template to API response
+function transformTemplate(template: Template) {
+  return {
+    id: template.id,
+    name: template.name,
+    description: template.description,
+    price: template.price,
+    category: template.category,
+    features: template.features || [],
+    imageUrl: template.image_url,
+    isActive: template.is_active,
+    sellerName: template.seller_name || 'AgentForge',
+    rating: template.rating || 0,
+    downloads: template.downloads || 0,
+    agents: (template.features || []).map((f: any, idx: number) => ({
+      name: f.name || `Agent ${idx + 1}`,
+      role: f.role || 'agent',
+      capabilities: f.role || 'General capabilities',
+    })),
+    skills: [], // Could be linked via a separate table
+  };
+}
+
+// Mock templates as fallback
+const mockTemplates = [
   {
     id: 'saas-startup',
     name: 'SaaS Startup',
@@ -49,5 +90,36 @@ const templates = [
 ];
 
 export async function GET() {
-  return NextResponse.json({ templates });
+  try {
+    // Try to fetch from Supabase
+    let dbTemplates: Template[] = [];
+    let useDatabase = false;
+
+    try {
+      const supabase = await createSupabaseServerClient();
+      
+      const { data, error } = await supabase
+        .from('templates')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      if (!error && data) {
+        dbTemplates = data as Template[];
+        useDatabase = true;
+      }
+    } catch (dbError) {
+      console.warn('Database unavailable, using mock data:', dbError);
+    }
+
+    // Use database if available, otherwise fallback to mock
+    const templates = useDatabase 
+      ? dbTemplates.map(transformTemplate)
+      : mockTemplates;
+
+    return NextResponse.json({ templates });
+  } catch (error) {
+    console.error('Templates API error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }

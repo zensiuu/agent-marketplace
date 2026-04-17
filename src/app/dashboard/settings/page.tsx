@@ -17,11 +17,11 @@ function ToggleSwitch({
   return (
     <div className="flex items-center justify-between py-3 group">
       <div className="flex-1">
-        <p className="text-gray-200 text-sm" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+        <p className="text-sm text-[#f7f8f8] inter-body-medium">
           {label}
         </p>
         {description && (
-          <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+          <p className="text-xs text-[#8a8f98] mt-0.5 inter-caption">{description}</p>
         )}
       </div>
       <button
@@ -31,15 +31,15 @@ function ToggleSwitch({
         onClick={() => onChange(!enabled)}
         className={`
           relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent 
-          transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 
-          focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a]
-          ${enabled ? 'bg-cyan-500' : 'bg-surface-variant'}
+          transition-all duration-200 ease-in-out focus:outline-none focus-visible:ring-2 
+          focus-visible:ring-[#7170ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#08090a]
+          ${enabled ? 'bg-[#5e6ad2]' : 'bg-[#28282c]'}
         `}
       >
         <span
           className={`
             pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg 
-            ring-0 transition duration-200 ease-in-out
+            ring-0 transition-all duration-200 ease-in-out
             ${enabled ? 'translate-x-5' : 'translate-x-0'}
           `}
         >
@@ -49,7 +49,7 @@ function ToggleSwitch({
               ${enabled ? 'opacity-100' : 'opacity-0'}
             `}
           >
-            <svg className="h-3 w-3 text-cyan-500" fill="currentColor" viewBox="0 0 12 12">
+            <svg className="h-3 w-3 text-[#5e6ad2]" fill="currentColor" viewBox="0 0 12 12">
               <path d="M3.707 5.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L5 6.586 3.707 5.293z" />
             </svg>
           </span>
@@ -74,25 +74,22 @@ function ExpandableSection({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="glass-card overflow-hidden transition-all duration-300 hover:border-cyan-500/20">
+    <div className="card overflow-hidden transition-all duration-300 hover:bg-[rgba(255,255,255,0.02)]">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-5 text-left hover:bg-white/5 transition-colors"
+        className="w-full flex items-center justify-between p-6 text-left hover:bg-[rgba(255,255,255,0.02)] transition-colors"
       >
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+          <div className="w-10 h-10 rounded-lg bg-[rgba(94,106,210,0.15)] flex items-center justify-center text-[#7170ff]">
             {icon}
           </div>
-          <h2 
-            className="text-lg font-semibold text-white"
-            style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px' }}
-          >
+          <h2 className="text-lg font-medium text-[#f7f8f8] inter-display">
             {title}
           </h2>
         </div>
         <svg 
-          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+          className={`w-5 h-5 text-[#8a8f98] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           fill="none" 
           viewBox="0 0 24 24" 
           stroke="currentColor" 
@@ -108,7 +105,7 @@ function ExpandableSection({
           ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}
         `}
       >
-        <div className="p-5 pt-0 border-t border-white/5">
+        <div className="p-6 pt-0 border-t border-[rgba(255,255,255,0.05)]">
           {children}
         </div>
       </div>
@@ -119,19 +116,19 @@ function ExpandableSection({
 // Save Status Indicator
 function SaveStatus({ status }: { status: 'idle' | 'saving' | 'saved' | 'error' }) {
   const config = {
-    idle: { color: 'text-gray-500', text: 'No changes', icon: null },
-    saving: { color: 'text-cyan-400', text: 'Saving...', icon: (
+    idle: { color: 'text-[#62666d]', text: 'No changes', icon: null },
+    saving: { color: 'text-[#7170ff]', text: 'Saving...', icon: (
       <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
     )},
-    saved: { color: 'text-green-400', text: 'Saved', icon: (
+    saved: { color: 'text-[#10b981]', text: 'Saved', icon: (
       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
       </svg>
     )},
-    error: { color: 'text-red-400', text: 'Error saving', icon: (
+    error: { color: 'text-[#ef4444]', text: 'Error saving', icon: (
       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
@@ -141,7 +138,7 @@ function SaveStatus({ status }: { status: 'idle' | 'saving' | 'saved' | 'error' 
   const { color, text, icon } = config[status];
 
   return (
-    <div className={`flex items-center gap-2 ${color}`} style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '12px' }}>
+    <div className={`flex items-center gap-2 ${color} inter-caption`}>
       {icon}
       <span>{text}</span>
     </div>
@@ -153,18 +150,18 @@ function APIKeyItem({ name, apiKey: keyPreview, lastUsed, onDelete }: { name: st
   const [showKey, setShowKey] = useState(false);
   
   return (
-    <div className="flex items-center justify-between p-4 bg-surface-container-low rounded-lg border border-white/5">
+    <div className="flex items-center justify-between p-4 bg-[#191a1b] rounded-lg border border-[rgba(255,255,255,0.05)]">
       <div className="flex-1 min-w-0">
-        <p className="text-white font-medium" style={{ fontFamily: 'Rajdhani, sans-serif' }}>{name}</p>
-        <p className="text-xs text-gray-500 font-mono mt-1">
-          {showKey ? keyPreview : '••••••••••••••••' + keyPreview.slice(-4)}
+        <p className="text-sm text-[#f7f8f8] inter-body-medium">{name}</p>
+        <p className="text-xs text-[#62666d] inter-mono mt-1">
+          {showKey ? keyPreview : 'â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢' + keyPreview.slice(-4)}
         </p>
-        <p className="text-xs text-gray-600 mt-1">Last used: {lastUsed}</p>
+        <p className="text-xs text-[#62666d] mt-1 inter-caption">Last used: {lastUsed}</p>
       </div>
       <div className="flex items-center gap-2">
         <button 
           onClick={() => setShowKey(!showKey)}
-          className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+          className="p-2 rounded-lg hover:bg-[rgba(255,255,255,0.05)] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors"
           title={showKey ? 'Hide key' : 'Show key'}
         >
           {showKey ? (
@@ -180,7 +177,7 @@ function APIKeyItem({ name, apiKey: keyPreview, lastUsed, onDelete }: { name: st
         </button>
         <button 
           onClick={onDelete}
-          className="p-2 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-colors"
+          className="p-2 rounded-lg hover:bg-[rgba(239,68,68,0.1)] text-[#8a8f98] hover:text-[#ef4444] transition-colors"
           title="Delete key"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -286,18 +283,15 @@ export default function SettingsPage() {
   }, [apiKeys]);
 
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-6 lg:p-8">
       {/* Header */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 
-              className="text-2xl lg:text-3xl font-bold text-white mb-2"
-              style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '2px' }}
-            >
-              SETTINGS
+            <h1 className="text-2xl font-medium text-[#f7f8f8] mb-2 inter-display">
+              Settings
             </h1>
-            <p className="text-gray-400" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+            <p className="text-sm text-[#8a8f98] inter-body">
               Manage your account preferences and configurations
             </p>
           </div>
@@ -328,51 +322,48 @@ export default function SettingsPage() {
         >
           <div className="space-y-4">
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold">
+              <div className="w-20 h-20 rounded-full bg-[rgba(94,106,210,0.15)] flex items-center justify-center text-[#7170ff] text-2xl font-medium inter-display">
                 D
               </div>
               <div>
-                <button className="btn-secondary text-xs mb-2">Upload Photo</button>
-                <p className="text-xs text-gray-500">JPG, PNG or GIF. Max 2MB.</p>
+                <button className="btn-ghost text-xs mb-2">Upload Photo</button>
+                <p className="text-xs text-[#62666d] inter-caption">JPG, PNG or GIF. Max 2MB.</p>
               </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm text-gray-400 mb-2" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                <label className="block text-sm text-[#8a8f98] mb-2 inter-caption">
                   DISPLAY NAME
                 </label>
                 <input
                   type="text"
                   value={profile.name}
                   onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                  className="w-full bg-surface-container-low border border-outline-variant/30 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition-colors rounded-lg"
-                  style={{ fontFamily: 'Rajdhani, sans-serif' }}
+                  className="input w-full bg-[#191a1b] border-[#23252a] text-[#f7f8f8] placeholder-[#62666d]"
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-2" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                <label className="block text-sm text-[#8a8f98] mb-2 inter-caption">
                   EMAIL ADDRESS
                 </label>
                 <input
                   type="email"
                   value={profile.email}
                   onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                  className="w-full bg-surface-container-low border border-outline-variant/30 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition-colors rounded-lg"
-                  style={{ fontFamily: 'Rajdhani, sans-serif' }}
+                  className="input w-full bg-[#191a1b] border-[#23252a] text-[#f7f8f8] placeholder-[#62666d]"
                 />
               </div>
             </div>
             
             <div>
-              <label className="block text-sm text-gray-400 mb-2" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+              <label className="block text-sm text-[#8a8f98] mb-2 inter-caption">
                 TIMEZONE
               </label>
               <select
                 value={profile.timezone}
                 onChange={(e) => setProfile({ ...profile, timezone: e.target.value })}
-                className="w-full bg-surface-container-low border border-outline-variant/30 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition-colors rounded-lg"
-                style={{ fontFamily: 'Rajdhani, sans-serif' }}
+                className="input w-full bg-[#191a1b] border-[#23252a] text-[#f7f8f8]"
               >
                 <option value="America/New_York">Eastern Time (ET)</option>
                 <option value="America/Chicago">Central Time (CT)</option>
@@ -817,21 +808,9 @@ export default function SettingsPage() {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-gray-400 mb-2" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                <label className="block text-sm text-[#8a8f98] mb-2 inter-caption">
                   KEY NAME
                 </label>
-                <input
-                  type="text"
-                  value={newKeyName}
-                  onChange={(e) => setNewKeyName(e.target.value)}
-                  placeholder="e.g., Production Key"
-                  className="w-full bg-surface-container-low border border-outline-variant/30 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition-colors rounded-lg"
-                  style={{ fontFamily: 'Rajdhani, sans-serif' }}
-                  autoFocus
-                />
-              </div>
-              
-              <div className="flex gap-3 pt-2">
                 <button 
                   onClick={() => setShowApiKeyModal(false)}
                   className="btn-secondary flex-1"

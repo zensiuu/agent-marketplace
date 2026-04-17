@@ -1,43 +1,87 @@
 // Simple in-memory token store for testing
 // In production, this would be replaced with Auth0 Token Vault
 
+import { TokenEncryption } from './crypto';
+import { tokenLock } from './async-lock';
+
 interface SimpleToken {
   id: string;
   userId: string;
   serviceName: string;
-  accessToken: string;
+  encryptedAccessToken: string;
   metadata: Record<string, any>;
   createdAt: string;
 }
 
 class SimpleTokenStore {
   private tokens: Map<string, SimpleToken> = new Map();
+  private encryptionKey: string;
+
+  constructor() {
+    const key = process.env.TOKEN_ENCRYPTION_KEY;
+    if (!key || !TokenEncryption.validateEncryptionKey(key)) {
+      // For development/demo, use a fallback key
+      console.warn('TOKEN_ENCRYPTION_KEY not set, using fallback key for development');
+      this.encryptionKey = 'development-fallback-encryption-key-32-chars';
+    } else {
+      this.encryptionKey = key;
+    }
+  }
 
   async storeToken(userId: string, serviceName: string, accessToken: string, metadata: Record<string, any> = {}): Promise<SimpleToken> {
-    const id = `${userId}_${serviceName}`;
-    const token: SimpleToken = {
-      id,
-      userId,
-      serviceName,
-      accessToken,
-      metadata: {
-        ...metadata,
+    const lockKey = `store_${userId}_${serviceName}`;
+    
+    return tokenLock.withLock(lockKey, async () => {
+      const id = `${userId}_${serviceName}`;
+      
+      // Encrypt the access token
+      const encryptedAccessToken = await TokenEncryption.encrypt(accessToken, this.encryptionKey);
+      
+      const token: SimpleToken = {
+        id,
+        userId,
+        serviceName,
+        encryptedAccessToken,
+        metadata: {
+          ...metadata,
+          createdAt: new Date().toISOString(),
+          deploymentCount: metadata.deploymentCount || 0,
+        },
         createdAt: new Date().toISOString(),
-        deploymentCount: metadata.deploymentCount || 0,
-      },
-      createdAt: new Date().toISOString(),
-    };
+      };
 
-    this.tokens.set(id, token);
-    console.log('Token stored:', { id, serviceName, userId });
-    return token;
+      this.tokens.set(id, token);
+      console.log('Token stored securely:', { id, serviceName, userId });
+      return token;
+    });
   }
 
   async getToken(userId: string, serviceName: string): Promise<SimpleToken | null> {
     const id = `${userId}_${serviceName}`;
-    const token = this.tokens.get(id) || null;
-    console.log('Token retrieved:', { id, found: !!token });
-    return token;
+    const encryptedToken = this.tokens.get(id) || null;
+    
+    if (!encryptedToken) {
+      console.log('Token not found:', { id });
+      return null;
+    }
+
+    console.log('Token retrieved securely:', { id, found: !!encryptedToken });
+    return encryptedToken;
+  }
+
+  /**
+   * Get decrypted access token for API calls
+   */
+  async getDecryptedAccessToken(userId: string, serviceName: string): Promise<string | null> {
+    const token = await this.getToken(userId, serviceName);
+    if (!token) return null;
+
+    try {
+      return await TokenEncryption.decrypt(token.encryptedAccessToken, this.encryptionKey);
+    } catch (error) {
+      console.error('Failed to decrypt token:', error);
+      return null;
+    }
   }
 
   async listUserTokens(userId: string): Promise<SimpleToken[]> {
@@ -47,24 +91,35 @@ class SimpleTokenStore {
   }
 
   async deleteToken(userId: string, serviceName: string): Promise<boolean> {
-    const id = `${userId}_${serviceName}`;
-    const result = this.tokens.delete(id);
-    console.log('Token deleted:', { id, success: result });
-    return result;
+    const lockKey = `delete_${userId}_${serviceName}`;
+    
+    return tokenLock.withLock(lockKey, async () => {
+      const id = `${userId}_${serviceName}`;
+      const result = this.tokens.delete(id);
+      console.log('Token deleted:', { id, success: result });
+      return result;
+    });
   }
 
   async validateToken(token: SimpleToken): Promise<boolean> {
-    // Simple validation - check if token exists and is not expired
+    // Simple validation - check if token exists and can be decrypted
     if (!token) return false;
-    
-    // For demo purposes, all tokens are valid
-    // In production, you'd check expiration, revocation, etc.
-    return true;
+
+    try {
+      // Try to decrypt to verify token integrity
+      await TokenEncryption.decrypt(token.encryptedAccessToken, this.encryptionKey);
+      
+      // For demo purposes, all decryptable tokens are valid
+      // In production, you'd check expiration, revocation, etc.
+      return true;
+    } catch (error) {
+      console.error('Token validation failed:', error);
+      return false;
+    }
   }
 
   async getPaperclipToken(userId: string): Promise<string | null> {
-    const token = await this.getToken(userId, 'Paperclip');
-    return token?.accessToken || null;
+    return this.getDecryptedAccessToken(userId, 'Paperclip');
   }
 
   async storePaperclipToken(userId: string, apiKey: string): Promise<SimpleToken> {
@@ -86,15 +141,20 @@ class SimpleTokenStore {
   }
 
   async updateTokenUsage(userId: string, serviceName: string, usageData: Record<string, any>): Promise<void> {
-    const token = await this.getToken(userId, serviceName);
-    if (token) {
-      token.metadata = {
-        ...token.metadata,
-        ...usageData,
-        lastUsed: new Date().toISOString(),
-      };
-      this.tokens.set(token.id, token);
-    }
+    const lockKey = `update_${userId}_${serviceName}`;
+    
+    return tokenLock.withLock(lockKey, async () => {
+      const id = `${userId}_${serviceName}`;
+      const token = this.tokens.get(id);
+      if (token) {
+        token.metadata = {
+          ...token.metadata,
+          ...usageData,
+          lastUsed: new Date().toISOString(),
+        };
+        this.tokens.set(id, token);
+      }
+    });
   }
 }
 

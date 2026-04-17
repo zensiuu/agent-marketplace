@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSecureDeploymentService } from '@/lib/secure-deployment';
+import { requireCurrentUser } from '@/lib/get-server-session';
 
 export async function POST(request: NextRequest) {
   try {
-    // For demo/testing - skip authentication for now
-    // TODO: Add proper Auth0 authentication
-    const userId = 'demo-user'; // Mock user ID for testing
+    // Get authenticated user
+    const user = await requireCurrentUser();
+    const userId = user.id;
 
     const body = await request.json();
     const { apiKey } = body;
@@ -57,9 +58,9 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    // For demo/testing - skip authentication for now
-    // TODO: Add proper Auth0 authentication
-    const userId = 'demo-user'; // Mock user ID for testing
+    // Get authenticated user
+    const user = await requireCurrentUser();
+    const userId = user.id;
 
     // Get secure deployment service
     const deploymentService = getSecureDeploymentService();

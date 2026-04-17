@@ -19,10 +19,20 @@ import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
 // Database configuration from environment
 const databaseConfig = {
   connectionString: process.env.DATABASE_URL,
-  max: parseInt(process.env.DB_POOL_MAX || '10', 10),
+  // Dynamic pool sizing based on environment and expected load
+  max: process.env.NODE_ENV === 'production' 
+    ? parseInt(process.env.DB_POOL_MAX || '20', 10)  // Production: higher pool size
+    : parseInt(process.env.DB_POOL_MAX || '5', 10), // Development: conservative pool size
   idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT || '30000', 10),
   connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT || '10000', 10),
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  // Additional production optimizations
+  ...(process.env.NODE_ENV === 'production' && {
+    // Enable connection reuse in production
+    allowExitOnIdle: false,
+    // Set a reasonable statement timeout to prevent long-running queries
+    statement_timeout: 30000,
+  }),
 };
 
 // Create connection pool (singleton pattern)

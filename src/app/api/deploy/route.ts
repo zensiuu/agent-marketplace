@@ -1,19 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSecureDeploymentService } from '@/lib/secure-deployment';
+import { requireCurrentUser } from '@/lib/get-server-session';
+import { validateDeploymentRequest } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
   try {
-    // For demo/testing - skip authentication for now
-    // TODO: Add proper Auth0 authentication
-    const userId = 'demo-user'; // Mock user ID for testing
+    // Get authenticated user
+    const user = await requireCurrentUser();
+    const userId = user.id;
 
     const body = await request.json();
     const { templateId, companyName, templateData } = body;
 
-    // Validate request
-    if (!templateId || !companyName || !templateData) {
+    // Validate deployment request
+    const validation = validateDeploymentRequest({ templateId, companyName, templateData });
+    if (!validation.isValid) {
       return NextResponse.json(
-        { error: 'Missing required fields: templateId, companyName, templateData' },
+        { error: validation.error },
         { status: 400 }
       );
     }
@@ -70,9 +73,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    // For demo/testing - skip authentication for now
-    // TODO: Add proper Auth0 authentication
-    const userId = 'demo-user'; // Mock user ID for testing
+    // Get authenticated user
+    const user = await requireCurrentUser();
+    const userId = user.id;
 
     const deploymentService = getSecureDeploymentService();
     
