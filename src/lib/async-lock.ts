@@ -3,7 +3,7 @@
  */
 
 export class AsyncLock {
-  private locks: Map<string, Promise<void>> = new Map();
+  private locks: Map<string, Promise<any>> = new Map();
 
   /**
    * Execute a function with a lock to prevent concurrent execution

@@ -44,53 +44,53 @@ export default function DashboardPage() {
   const activeAgents = agents.filter(a => a.status === 'active').length;
 
   return (
-    <div className="p-6">
+    <div className="p-6 lg:p-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-medium text-[#f7f8f8] mb-1" style={{ fontWeight: 510 }}>
+        <h1 className="text-2xl font-medium text-[#f7f8f8] mb-2 inter-display">
           Overview
         </h1>
-        <p className="text-sm text-[#8a8f98]">
+        <p className="text-sm text-[#8a8f98] inter-body">
           Monitor your deployed AI teams and agent activity
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="card p-5">
-          <div className="text-xs text-[#62666d] mb-2">Deployments</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mobile-stack">
+        <div className="card p-6">
+          <div className="text-xs text-[#62666d] mb-2 inter-caption">Deployments</div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+            <span className="text-2xl font-medium text-[#f7f8f8] inter-display">
               {deployments.length}
             </span>
-            <span className="text-xs text-[#10b981]">active</span>
+            <span className="text-xs text-[#10b981] inter-caption">active</span>
           </div>
         </div>
-        <div className="card p-5">
-          <div className="text-xs text-[#62666d] mb-2">Total Agents</div>
+        <div className="card p-6">
+          <div className="text-xs text-[#62666d] mb-2 inter-caption">Total Agents</div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+            <span className="text-2xl font-medium text-[#f7f8f8] inter-display">
               {agents.length}
             </span>
-            <span className="text-xs text-[#8a8f98]">running</span>
+            <span className="text-xs text-[#8a8f98] inter-caption">running</span>
           </div>
         </div>
-        <div className="card p-5">
-          <div className="text-xs text-[#62666d] mb-2">Active Now</div>
+        <div className="card p-6">
+          <div className="text-xs text-[#62666d] mb-2 inter-caption">Active Now</div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+            <span className="text-2xl font-medium text-[#f7f8f8] inter-display">
               {activeAgents}
             </span>
-            <span className="text-xs text-[#10b981]">active</span>
+            <span className="text-xs text-[#10b981] inter-caption">active</span>
           </div>
         </div>
-        <div className="card p-5">
-          <div className="text-xs text-[#62666d] mb-2">Monthly Cost</div>
+        <div className="card p-6">
+          <div className="text-xs text-[#62666d] mb-2 inter-caption">Monthly Cost</div>
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+            <span className="text-2xl font-medium text-[#f7f8f8] inter-display">
               ${totalCost}
             </span>
-            <span className="text-xs text-[#62666d]">/mo</span>
+            <span className="text-xs text-[#62666d] inter-caption">/mo</span>
           </div>
         </div>
       </div>
@@ -98,12 +98,12 @@ export default function DashboardPage() {
       {/* Deployments Section */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+          <h2 className="section-title">
             Deployments
           </h2>
           <Link 
             href="/dashboard/deploy" 
-            className="text-sm font-medium text-[#7170ff] hover:text-[#828fff] transition-colors"
+            className="btn-ghost text-sm"
           >
             Deploy New Team
           </Link>
@@ -111,9 +111,9 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {deployments.map((deployment) => (
-            <div key={deployment.id} className="card p-5">
+            <div key={deployment.id} className="card p-6 hover:bg-[rgba(255,255,255,0.04)] transition-colors">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-medium text-[#f7f8f8]">
+                <h3 className="card-title">
                   {deployment.name}
                 </h3>
                 <StatusBadge status={deployment.status} />
@@ -121,16 +121,16 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-6">
                   <div>
-                    <div className="text-xs text-[#62666d] mb-1">Agents</div>
-                    <div className="text-lg font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>{deployment.agentCount}</div>
+                    <div className="stat-label mb-1">Agents</div>
+                    <div className="stat-value text-lg">{deployment.agentCount}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-[#62666d] mb-1">Cost</div>
-                    <div className="text-lg font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>${deployment.monthlyCost}</div>
+                    <div className="stat-label mb-1">Cost</div>
+                    <div className="stat-value text-lg">${deployment.monthlyCost}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-[#62666d] mb-1">Last Activity</div>
-                    <div className="text-sm text-[#8a8f98]">{deployment.lastActivity}</div>
+                    <div className="stat-label mb-1">Last Activity</div>
+                    <div className="inter-body text-sm">{deployment.lastActivity}</div>
                   </div>
                 </div>
               </div>
@@ -145,41 +145,41 @@ export default function DashboardPage() {
       {/* Agents Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+          <h2 className="section-title">
             Recent Agent Activity
           </h2>
         </div>
 
         <div className="card overflow-hidden">
-          <table className="w-full">
-            <thead className="border-b border-[rgba(255,255,255,0.05)]">
+          <table className="data-table">
+            <thead>
               <tr>
-                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">AGENT</th>
-                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">ROLE</th>
-                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">STATUS</th>
-                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">TASKS</th>
-                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">COST TODAY</th>
+                <th>AGENT</th>
+                <th>ROLE</th>
+                <th>STATUS</th>
+                <th>TASKS</th>
+                <th>COST TODAY</th>
               </tr>
             </thead>
             <tbody>
               {agents.map((agent) => (
-                <tr key={agent.id} className="border-b border-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.02)]">
-                  <td className="px-5 py-4">
+                <tr key={agent.id}>
+                  <td>
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[rgba(94,106,210,0.15)] flex items-center justify-center">
-                        <span className="text-sm font-medium text-[#7170ff]" style={{ fontWeight: 510 }}>
+                      <div className="avatar">
+                        <span className="avatar-text">
                           {agent.name[0]}
                         </span>
                       </div>
-                      <span className="text-sm font-medium text-[#f7f8f8]">{agent.name}</span>
+                      <span className="inter-body-medium text-sm">{agent.name}</span>
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-sm text-[#8a8f98]">{agent.role}</td>
+                  <td className="px-5 py-4 inter-body text-sm">{agent.role}</td>
                   <td className="px-5 py-4">
                     <AgentStatusBadge status={agent.status} />
                   </td>
-                  <td className="px-5 py-4 text-sm font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>{agent.tasksCompleted}</td>
-                  <td className="px-5 py-4 text-sm font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>${agent.costToday.toFixed(2)}</td>
+                  <td className="px-5 py-4 inter-body-medium text-sm">{agent.tasksCompleted}</td>
+                  <td className="px-5 py-4 inter-body-medium text-sm">${agent.costToday.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -192,13 +192,23 @@ export default function DashboardPage() {
 
 function StatusBadge({ status }: { status: 'active' | 'paused' | 'error' }) {
   const config = {
-    active: { bg: 'bg-[rgba(16,185,129,0.15)]', text: 'text-[#10b981]', border: 'border-[rgba(16,185,129,0.2)]', label: 'Active' },
-    paused: { bg: 'bg-[rgba(234,179,8,0.15)]', text: 'text-yellow-500', border: 'border-yellow-500/20', label: 'Paused' },
-    error: { bg: 'bg-[rgba(239,68,68,0.15)]', text: 'text-red-500', border: 'border-red-500/20', label: 'Error' },
+    active: { 
+      className: 'status-badge-active',
+      label: 'Active'
+    },
+    paused: { 
+      className: 'status-badge-paused',
+      label: 'Paused'
+    },
+    error: { 
+      className: 'status-badge-error',
+      label: 'Error'
+    },
   };
-  const { bg, text, border, label } = config[status];
+  const { className, label } = config[status];
   return (
-    <span className={`px-2.5 py-1 text-xs font-medium rounded ${bg} ${text} ${border}`}>
+    <span className={`status-badge ${className}`}>
+      <span className="status-dot"></span>
       {label}
     </span>
   );
@@ -206,13 +216,23 @@ function StatusBadge({ status }: { status: 'active' | 'paused' | 'error' }) {
 
 function AgentStatusBadge({ status }: { status: 'active' | 'idle' | 'error' }) {
   const config = {
-    active: { color: 'text-[#10b981]', label: '● Active' },
-    idle: { color: 'text-yellow-500', label: '● Idle' },
-    error: { color: 'text-red-500', label: '● Error' },
+    active: { 
+      className: 'agent-status-active',
+      label: 'Active'
+    },
+    idle: { 
+      className: 'agent-status-idle',
+      label: 'Idle'
+    },
+    error: { 
+      className: 'agent-status-error',
+      label: 'Error'
+    },
   };
-  const { color, label } = config[status];
+  const { className, label } = config[status];
   return (
-    <span className={`text-xs font-medium ${color}`}>
+    <span className={`agent-status ${className}`}>
+      <span className="status-dot"></span>
       {label}
     </span>
   );

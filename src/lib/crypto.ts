@@ -73,7 +73,7 @@ export class TokenEncryption {
       const decipher = createDecipheriv(this.ALGORITHM, key, iv);
       decipher.setAuthTag(tag);
       
-      let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+      let decrypted = decipher.update(encrypted.toString('hex'), 'hex', 'utf8');
       decrypted += decipher.final('utf8');
       
       return decrypted;
@@ -94,6 +94,6 @@ export class TokenEncryption {
    */
   static validateEncryptionKey(key: string): boolean {
     // Key should be at least 32 characters for proper entropy
-    return key && key.length >= 32;
+    return Boolean(key && key.length >= 32);
   }
 }

@@ -1,13 +1,9 @@
-export async function GET(req: Request) {
-  return new Response(JSON.stringify({ status: 'ok' }), { 
-    status: 200,
-    headers: { 'Content-Type': 'application/json' }
-  });
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(request: NextRequest) {
+  return NextResponse.json({ status: 'ok' });
 }
 
-export async function POST(req: Request) {
-  return new Response(JSON.stringify({ status: 'ok' }), { 
-    status: 200,
-    headers: { 'Content-Type': 'application/json' }
-  });
+export async function POST(request: NextRequest) {
+  return NextResponse.json({ status: 'ok' });
 }
