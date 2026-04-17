@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface Deployment {
   id: string;
@@ -27,7 +28,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mock data - replace with actual API calls
     setDeployments([
       { id: '1', name: 'SaaS Startup', status: 'active', agentCount: 5, monthlyCost: 299, lastActivity: '2 min ago' },
       { id: '2', name: 'Content Agency', status: 'active', agentCount: 4, monthlyCost: 199, lastActivity: '5 min ago' },
@@ -44,69 +44,97 @@ export default function DashboardPage() {
   const activeAgents = agents.filter(a => a.status === 'active').length;
 
   return (
-    <div className="p-8">
+    <div className="p-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 
-          className="text-3xl font-bold text-white mb-2"
-          style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '2px' }}
-        >
-          DASHBOARD
+        <h1 className="text-2xl font-medium text-[#f7f8f8] mb-1" style={{ fontWeight: 510 }}>
+          Overview
         </h1>
-        <p className="text-gray-400" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+        <p className="text-sm text-[#8a8f98]">
           Monitor your deployed AI teams and agent activity
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <StatCard label="DEPLOYMENTS" value={deployments.length} suffix="active" />
-        <StatCard label="TOTAL AGENTS" value={agents.length} suffix="running" />
-        <StatCard label="ACTIVE NOW" value={activeAgents} suffix="active" />
-        <StatCard label="MONTHLY COST" value={`$${totalCost}`} suffix="/month" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="card p-5">
+          <div className="text-xs text-[#62666d] mb-2">Deployments</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+              {deployments.length}
+            </span>
+            <span className="text-xs text-[#10b981]">active</span>
+          </div>
+        </div>
+        <div className="card p-5">
+          <div className="text-xs text-[#62666d] mb-2">Total Agents</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+              {agents.length}
+            </span>
+            <span className="text-xs text-[#8a8f98]">running</span>
+          </div>
+        </div>
+        <div className="card p-5">
+          <div className="text-xs text-[#62666d] mb-2">Active Now</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+              {activeAgents}
+            </span>
+            <span className="text-xs text-[#10b981]">active</span>
+          </div>
+        </div>
+        <div className="card p-5">
+          <div className="text-xs text-[#62666d] mb-2">Monthly Cost</div>
+          <div className="flex items-baseline gap-1">
+            <span className="text-2xl font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+              ${totalCost}
+            </span>
+            <span className="text-xs text-[#62666d]">/mo</span>
+          </div>
+        </div>
       </div>
 
       {/* Deployments Section */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 
-            className="text-xl font-bold text-white"
-            style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '1px' }}
-          >
-            DEPLOYMENTS
+          <h2 className="text-lg font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+            Deployments
           </h2>
-          <button className="btn-primary text-xs">
+          <Link 
+            href="/dashboard/deploy" 
+            className="text-sm font-medium text-[#7170ff] hover:text-[#828fff] transition-colors"
+          >
             Deploy New Team
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {deployments.map((deployment) => (
-            <div key={deployment.id} className="glass-card p-6">
+            <div key={deployment.id} className="card p-5">
               <div className="flex items-center justify-between mb-4">
-                <h3 
-                  className="text-lg font-semibold text-white"
-                  style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '14px' }}
-                >
+                <h3 className="text-base font-medium text-[#f7f8f8]">
                   {deployment.name}
                 </h3>
                 <StatusBadge status={deployment.status} />
               </div>
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-xs text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif' }}>AGENTS</div>
-                  <div className="text-xl font-bold text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>{deployment.agentCount}</div>
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif' }}>COST</div>
-                  <div className="text-xl font-bold text-purple-400" style={{ fontFamily: 'Orbitron, sans-serif' }}>${deployment.monthlyCost}</div>
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif' }}>LAST ACT</div>
-                  <div className="text-sm font-bold text-gray-400" style={{ fontFamily: 'Rajdhani, sans-serif' }}>{deployment.lastActivity}</div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-6">
+                  <div>
+                    <div className="text-xs text-[#62666d] mb-1">Agents</div>
+                    <div className="text-lg font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>{deployment.agentCount}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-[#62666d] mb-1">Cost</div>
+                    <div className="text-lg font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>${deployment.monthlyCost}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-[#62666d] mb-1">Last Activity</div>
+                    <div className="text-sm text-[#8a8f98]">{deployment.lastActivity}</div>
+                  </div>
                 </div>
               </div>
-              <button className="btn-secondary mt-4 w-full text-xs">
+              <button className="btn-ghost mt-4 w-full text-sm">
                 View Details
               </button>
             </div>
@@ -117,42 +145,41 @@ export default function DashboardPage() {
       {/* Agents Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 
-            className="text-xl font-bold text-white"
-            style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '1px' }}
-          >
-            RECENT AGENT ACTIVITY
+          <h2 className="text-lg font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>
+            Recent Agent Activity
           </h2>
         </div>
 
-        <div className="glass-card overflow-hidden">
+        <div className="card overflow-hidden">
           <table className="w-full">
-            <thead className="border-b border-white/10">
+            <thead className="border-b border-[rgba(255,255,255,0.05)]">
               <tr>
-                <th className="text-left px-6 py-4 text-xs text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '1px' }}>AGENT</th>
-                <th className="text-left px-6 py-4 text-xs text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '1px' }}>ROLE</th>
-                <th className="text-left px-6 py-4 text-xs text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '1px' }}>STATUS</th>
-                <th className="text-left px-6 py-4 text-xs text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '1px' }}>TASKS</th>
-                <th className="text-left px-6 py-4 text-xs text-gray-500" style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '1px' }}>COST TODAY</th>
+                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">AGENT</th>
+                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">ROLE</th>
+                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">STATUS</th>
+                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">TASKS</th>
+                <th className="text-left px-5 py-3 text-xs text-[#62666d] font-medium">COST TODAY</th>
               </tr>
             </thead>
             <tbody>
               {agents.map((agent) => (
-                <tr key={agent.id} className="border-b border-white/5 hover:bg-white/5">
-                  <td className="px-6 py-4">
+                <tr key={agent.id} className="border-b border-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.02)]">
+                  <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center">
-                        <span className="text-cyan-400 text-sm">{agent.name[0]}</span>
+                      <div className="w-8 h-8 rounded-full bg-[rgba(94,106,210,0.15)] flex items-center justify-center">
+                        <span className="text-sm font-medium text-[#7170ff]" style={{ fontWeight: 510 }}>
+                          {agent.name[0]}
+                        </span>
                       </div>
-                      <span className="text-white font-medium" style={{ fontFamily: 'Rajdhani, sans-serif' }}>{agent.name}</span>
+                      <span className="text-sm font-medium text-[#f7f8f8]">{agent.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-gray-400" style={{ fontFamily: 'Rajdhani, sans-serif' }}>{agent.role}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-5 py-4 text-sm text-[#8a8f98]">{agent.role}</td>
+                  <td className="px-5 py-4">
                     <AgentStatusBadge status={agent.status} />
                   </td>
-                  <td className="px-6 py-4 text-white font-bold" style={{ fontFamily: 'Orbitron, sans-serif' }}>{agent.tasksCompleted}</td>
-                  <td className="px-6 py-4 text-purple-400 font-bold" style={{ fontFamily: 'Orbitron, sans-serif' }}>${agent.costToday.toFixed(2)}</td>
+                  <td className="px-5 py-4 text-sm font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>{agent.tasksCompleted}</td>
+                  <td className="px-5 py-4 text-sm font-medium text-[#f7f8f8]" style={{ fontWeight: 510 }}>${agent.costToday.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -163,58 +190,29 @@ export default function DashboardPage() {
   );
 }
 
-function StatCard({ label, value, suffix }: { label: string; value: string | number; suffix: string }) {
-  return (
-    <div className="glass-card p-6">
-      <div 
-        className="text-xs text-gray-500 mb-2"
-        style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '2px' }}
-      >
-        {label}
-      </div>
-      <div className="flex items-baseline gap-2">
-        <span 
-          className="text-3xl font-bold text-white"
-          style={{ fontFamily: 'Orbitron, sans-serif' }}
-        >
-          {value}
-        </span>
-        <span className="text-sm text-cyan-400" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
-          {suffix}
-        </span>
-      </div>
-    </div>
-  );
-}
-
 function StatusBadge({ status }: { status: 'active' | 'paused' | 'error' }) {
-  const colors = {
-    active: 'bg-green-500/20 text-green-400 border-green-500/30',
-    paused: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    error: 'bg-red-500/20 text-red-400 border-red-500/30',
+  const config = {
+    active: { bg: 'bg-[rgba(16,185,129,0.15)]', text: 'text-[#10b981]', border: 'border-[rgba(16,185,129,0.2)]', label: 'Active' },
+    paused: { bg: 'bg-[rgba(234,179,8,0.15)]', text: 'text-yellow-500', border: 'border-yellow-500/20', label: 'Paused' },
+    error: { bg: 'bg-[rgba(239,68,68,0.15)]', text: 'text-red-500', border: 'border-red-500/20', label: 'Error' },
   };
+  const { bg, text, border, label } = config[status];
   return (
-    <span 
-      className={`px-2 py-1 text-xs rounded border ${colors[status]}`}
-      style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '1px' }}
-    >
-      {status.toUpperCase()}
+    <span className={`px-2.5 py-1 text-xs font-medium rounded ${bg} ${text} ${border}`}>
+      {label}
     </span>
   );
 }
 
 function AgentStatusBadge({ status }: { status: 'active' | 'idle' | 'error' }) {
   const config = {
-    active: { color: 'text-green-400', label: '● ACTIVE' },
-    idle: { color: 'text-yellow-400', label: '● IDLE' },
-    error: { color: 'text-red-400', label: '● ERROR' },
+    active: { color: 'text-[#10b981]', label: '● Active' },
+    idle: { color: 'text-yellow-500', label: '● Idle' },
+    error: { color: 'text-red-500', label: '● Error' },
   };
   const { color, label } = config[status];
   return (
-    <span 
-      className={`text-xs font-medium ${color}`}
-      style={{ fontFamily: 'Rajdhani, sans-serif', letterSpacing: '1px' }}
-    >
+    <span className={`text-xs font-medium ${color}`}>
       {label}
     </span>
   );

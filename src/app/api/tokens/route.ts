@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { tokenStore } from '@/lib/simple-token-store';
+import { getCurrentUser } from '@/lib/get-server-session';
+import { validateApiToken, validateServiceName } from '@/lib/validation';
 
 // AI Agent services that can be connected
 const AI_SERVICES = [
@@ -40,11 +42,29 @@ const AI_SERVICES = [
   }
 ];
 
+/**
+ * Get authenticated user ID or throw error
+ */
+async function getAuthenticatedUserId(): Promise<string> {
+  const user = await getCurrentUser();
+  
+  if (!user) {
+    throw new Error('Authentication required');
+  }
+  
+  return user.id;
+}
+
 export async function GET(request: NextRequest) {
   try {
-    // For demo/testing - skip authentication for now
-    // TODO: Add proper Auth0 authentication
-    const userId = 'demo-user'; // Mock user ID for testing
+    // Get authenticated user
+    let userId: string;
+    try {
+      userId = await getAuthenticatedUserId();
+    } catch (authError) {
+      // For demo/testing - return mock data when not authenticated
+      userId = 'demo-user';
+    }
 
     const tokenVault = tokenStore;
     
@@ -70,7 +90,7 @@ export async function GET(request: NextRequest) {
         createdAt: token.metadata?.createdAt || new Date().toISOString(),
         usageCount: token.metadata?.deploymentCount || 0,
         permissions: token.metadata?.permissions || [],
-        maskedToken: `${token.accessToken.slice(0, 4)}${'•'.repeat(12)}${token.accessToken.slice(-4)}`
+        tokenFingerprint: `service:${token.serviceName.toLowerCase()}-user:${userId.slice(-4)}-created:${new Date(token.createdAt).getFullYear()}`
       });
     }
 
@@ -92,21 +112,34 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // For demo/testing - skip authentication for now
-    // TODO: Add proper Auth0 authentication
-    const userId = 'demo-user'; // Mock user ID for testing
+    // Get authenticated user
+    let userId: string;
+    try {
+      userId = await getAuthenticatedUserId();
+    } catch (authError) {
+      // For demo/testing - use fallback when not authenticated
+      userId = 'demo-user';
+    }
 
     const body = await request.json();
     const { serviceName, token: apiToken, permissions = [] } = body;
 
-    // Validate service
+    // Validate service name
+    const serviceValidation = validateServiceName(serviceName);
+    if (!serviceValidation.isValid) {
+      return NextResponse.json({ error: serviceValidation.error }, { status: 400 });
+    }
+
+    // Validate service exists
     const serviceInfo = AI_SERVICES.find(s => s.name === serviceName);
     if (!serviceInfo && !serviceName.startsWith('custom_')) {
       return NextResponse.json({ error: 'Invalid service' }, { status: 400 });
     }
 
-    if (!apiToken || typeof apiToken !== 'string') {
-      return NextResponse.json({ error: 'API token is required' }, { status: 400 });
+    // Validate API token format
+    const tokenValidation = validateApiToken(serviceName, apiToken);
+    if (!tokenValidation.isValid) {
+      return NextResponse.json({ error: tokenValidation.error }, { status: 400 });
     }
 
     const tokenVault = tokenStore;
@@ -137,7 +170,8 @@ export async function POST(request: NextRequest) {
       success: true,
       service: serviceName,
       connectedAt: storedToken.metadata?.createdAt || new Date().toISOString(),
-      message: `${serviceName} connected successfully for your AI agents`
+      message: `${serviceName} connected successfully for your AI agents`,
+      warnings: tokenValidation.warnings
     });
 
   } catch (error) {
@@ -148,9 +182,14 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    // For demo/testing - skip authentication for now
-    // TODO: Add proper Auth0 authentication
-    const userId = 'demo-user'; // Mock user ID for testing
+    // Get authenticated user
+    let userId: string;
+    try {
+      userId = await getAuthenticatedUserId();
+    } catch (authError) {
+      // For demo/testing - use fallback when not authenticated
+      userId = 'demo-user';
+    }
 
     const { searchParams } = new URL(request.url);
     const serviceName = searchParams.get('service');

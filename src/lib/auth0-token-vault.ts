@@ -1,27 +1,3 @@
-// Stub for auth0 ManagementClient - install 'auth0' package for full functionality
-class ManagementClient {
-  constructor(_config: any) {}
-  async getUser(_params: any) { 
-    return { user_metadata: {} as any }; 
-  }
-  async updateUser(_id: any, _data: any) { 
-    return {}; 
-  }
-}
-
-interface TokenVaultConfig {
-  domain: string;
-  clientId: string;
-  clientSecret: string;
-  audience?: string;
-}
-
-interface TokenRequest {
-  userId: string;
-  serviceName: string;
-  scope?: string;
-}
-
 interface StoredToken {
   id: string;
   userId: string;
@@ -34,16 +10,62 @@ interface StoredToken {
 }
 
 export class Auth0TokenVault {
-  private management: ManagementClient;
-  private config: TokenVaultConfig;
+  private domain: string;
+  private clientId: string;
+  private clientSecret: string;
+  private accessToken: string | null = null;
+  private tokenExpiry: number = 0;
 
-  constructor(config: TokenVaultConfig) {
-    this.config = config;
-    this.management = new ManagementClient({
-      domain: config.domain,
-      clientId: config.clientId,
-      clientSecret: config.clientSecret,
+  constructor(config: { domain: string; clientId: string; clientSecret: string }) {
+    this.domain = config.domain;
+    this.clientId = config.clientId;
+    this.clientSecret = config.clientSecret;
+  }
+
+  private async getAccessToken(): Promise<string> {
+    if (this.accessToken && Date.now() < this.tokenExpiry - 60000) {
+      return this.accessToken;
+    }
+
+    const response = await fetch(`https://${this.domain}/oauth/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        grant_type: 'client_credentials',
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        audience: `https://${this.domain}/api/v2/`,
+      }),
     });
+
+    if (!response.ok) {
+      throw new Error('Failed to get Auth0 access token');
+    }
+
+    const data = await response.json();
+    this.accessToken = data.access_token;
+    this.tokenExpiry = Date.now() + (data.expires_in * 1000);
+    
+    return this.accessToken!;
+  }
+
+  private async getUserMetadata(userId: string): Promise<Record<string, any>> {
+    const token = await this.getAccessToken();
+    
+    const response = await fetch(`https://${this.domain}/api/v2/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.error('Failed to get user:', response.status);
+      return {};
+    }
+
+    const user = await response.json();
+    return user.user_metadata || {};
   }
 
   /**
@@ -51,17 +73,37 @@ export class Auth0TokenVault {
    */
   async storeToken(userId: string, serviceName: string, accessToken: string, metadata?: Record<string, any>): Promise<StoredToken> {
     try {
-      // Store token as user metadata with encryption
-      const userMetadata = {
-        [`token_vault_${serviceName}`]: {
+      const token = await this.getAccessToken();
+      const existingMetadata = await this.getUserMetadata(userId);
+      
+      const tokenKey = `token_vault_${serviceName}`;
+      const updatedMetadata = {
+        ...existingMetadata,
+        [tokenKey]: {
           accessToken,
           serviceName,
           storedAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 3600000).toISOString(),
           metadata,
         },
       };
 
-      await this.management.updateUser({ id: userId }, { user_metadata: userMetadata });
+      const response = await fetch(`https://${this.domain}/api/v2/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_metadata: updatedMetadata,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        console.error('Failed to store token:', error);
+        throw new Error('Token storage failed');
+      }
 
       return {
         id: `${userId}_${serviceName}`,
@@ -69,7 +111,7 @@ export class Auth0TokenVault {
         serviceName,
         tokenType: 'Bearer',
         accessToken,
-        expiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour default
+        expiresAt: new Date(Date.now() + 3600000).toISOString(),
         metadata,
       };
     } catch (error) {
@@ -83,8 +125,9 @@ export class Auth0TokenVault {
    */
   async getToken(userId: string, serviceName: string): Promise<StoredToken | null> {
     try {
-      const user = await this.management.getUser({ id: userId });
-      const tokenData = user.user_metadata?.[`token_vault_${serviceName}`];
+      const metadata = await this.getUserMetadata(userId);
+      const tokenKey = `token_vault_${serviceName}`;
+      const tokenData = metadata[tokenKey];
 
       if (!tokenData) {
         return null;
@@ -101,7 +144,7 @@ export class Auth0TokenVault {
       };
     } catch (error) {
       console.error('Failed to retrieve token from vault:', error);
-      throw new Error('Token retrieval failed');
+      return null;
     }
   }
 
@@ -128,12 +171,25 @@ export class Auth0TokenVault {
    */
   async deleteToken(userId: string, serviceName: string): Promise<boolean> {
     try {
-      const user = await this.management.getUser({ id: userId });
-      const metadata = { ...user.user_metadata };
-      delete metadata[`token_vault_${serviceName}`];
+      const token = await this.getAccessToken();
+      const existingMetadata = await this.getUserMetadata(userId);
+      
+      const tokenKey = `token_vault_${serviceName}`;
+      const updatedMetadata = { ...existingMetadata };
+      delete updatedMetadata[tokenKey];
 
-      await this.management.updateUser({ id: userId }, { user_metadata: metadata });
-      return true;
+      const response = await fetch(`https://${this.domain}/api/v2/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_metadata: updatedMetadata,
+        }),
+      });
+
+      return response.ok;
     } catch (error) {
       console.error('Failed to delete token from vault:', error);
       return false;
@@ -145,8 +201,7 @@ export class Auth0TokenVault {
    */
   async listUserTokens(userId: string): Promise<StoredToken[]> {
     try {
-      const user = await this.management.getUser({ id: userId });
-      const metadata = user.user_metadata || {};
+      const metadata = await this.getUserMetadata(userId);
       const tokens: StoredToken[] = [];
 
       Object.keys(metadata).forEach(key => {
@@ -181,7 +236,6 @@ export class Auth0TokenVault {
     const expiryTime = new Date(token.expiresAt).getTime();
     const currentTime = Date.now();
     
-    // Add 5-minute buffer before expiry
     return currentTime < (expiryTime - 300000);
   }
 }
@@ -191,18 +245,16 @@ let tokenVaultInstance: Auth0TokenVault | null = null;
 
 export function getTokenVault(): Auth0TokenVault {
   if (!tokenVaultInstance) {
-    const config: TokenVaultConfig = {
-      domain: process.env.AUTH0_A2A_DOMAIN || process.env.AUTH0_DOMAIN!,
-      clientId: process.env.AUTH0_A2A_CLIENT_ID!,
-      clientSecret: process.env.AUTH0_A2A_CLIENT_SECRET!,
-      audience: 'https://token-vault.auth0.com',
-    };
+    const domain = process.env.AUTH0_A2A_DOMAIN || process.env.AUTH0_DOMAIN;
+    const clientId = process.env.AUTH0_A2A_CLIENT_ID;
+    const clientSecret = process.env.AUTH0_A2A_CLIENT_SECRET;
 
-    if (!config.clientId || !config.clientSecret) {
+    if (!domain || !clientId || !clientSecret) {
+      console.warn('Auth0 Token Vault credentials not fully configured in environment');
       throw new Error('Auth0 Token Vault credentials not configured');
     }
 
-    tokenVaultInstance = new Auth0TokenVault(config);
+    tokenVaultInstance = new Auth0TokenVault({ domain, clientId, clientSecret });
   }
 
   return tokenVaultInstance;
